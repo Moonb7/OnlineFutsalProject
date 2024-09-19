@@ -128,7 +128,6 @@ exports.Prisma.PlayersScalarFieldEnum = {
   power: 'power',
   defense: 'defense',
   stamina: 'stamina',
-  probability: 'probability',
   tierId: 'tierId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -137,7 +136,7 @@ exports.Prisma.PlayersScalarFieldEnum = {
 exports.Prisma.TiersScalarFieldEnum = {
   tierId: 'tierId',
   tierName: 'tierName',
-  chance: 'chance',
+  probability: 'probability',
   price: 'price'
 };
 

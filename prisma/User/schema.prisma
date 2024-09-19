@@ -5,7 +5,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
+  url      = env("DATABASE_USER_URL")
 }
 
 model Users {
@@ -17,11 +17,11 @@ model Users {
   createdAt     DateTime    @default(now()) 
   updatedAt     DateTime    @updatedAt
 
-  userPlayers  UserPlayers[]
-  teams        Teams[]
-  Caches       Caches[]
-  Users        MatchLogs[]   @relation("Users")
-  EnemyUsers   MatchLogs[]   @relation("EnemyUsers")
+  userPlayers   UserPlayers[]
+  teams         Teams[]
+  Caches        Caches[]
+  Users         MatchLogs[]   @relation("Users")
+  EnemyUsers    MatchLogs[]   @relation("EnemyUsers")
 
   @@map("Users")
 }
@@ -38,7 +38,9 @@ model UserPlayers {
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt 
 
-  teams         Teams[]
+  UserPlayer1   Teams[]     @relation("UserPlayer1")
+  UserPlayer2   Teams[]     @relation("UserPlayer2")
+  UserPlayer3   Teams[]     @relation("UserPlayer3")
 
   @@map("UserPlayers")
 }
@@ -47,8 +49,12 @@ model Teams {
   teamId        Int         @id @default(autoincrement())
   userId        Int
   users         Users       @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  userPlayerId  Int
-  userPlayers   UserPlayers @relation(fields: [userPlayerId], references: [userPlayerId], onDelete: Cascade)
+  userPlayerId1 Int
+  UserPlayer1   UserPlayers @relation("UserPlayer1", fields: [userPlayerId1], references: [userPlayerId], onDelete: Cascade)
+  userPlayerId2 Int
+  UserPlayer2   UserPlayers @relation("UserPlayer2", fields: [userPlayerId2], references: [userPlayerId], onDelete: Cascade)
+  userPlayerId3 Int
+  UserPlayer3   UserPlayers @relation("UserPlayer3", fields: [userPlayerId3], references: [userPlayerId], onDelete: Cascade)
 
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt 
@@ -61,7 +67,7 @@ model Caches {
   userId        Int
   users         Users       @relation(fields: [userId], references: [userId], onDelete: Cascade)
   cacheChange   Int
-  type          String      
+  cacheSource   Int      
 
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt 
@@ -78,7 +84,6 @@ model MatchLogs {
 
   isWin         Int
   playedAt      DateTime    @default(now())
-
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 

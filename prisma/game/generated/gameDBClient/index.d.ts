@@ -969,7 +969,6 @@ export namespace Prisma {
     power: number | null
     defense: number | null
     stamina: number | null
-    probability: number | null
     tierId: number | null
   }
 
@@ -981,7 +980,6 @@ export namespace Prisma {
     power: number | null
     defense: number | null
     stamina: number | null
-    probability: number | null
     tierId: number | null
   }
 
@@ -994,7 +992,6 @@ export namespace Prisma {
     power: number | null
     defense: number | null
     stamina: number | null
-    probability: number | null
     tierId: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -1009,7 +1006,6 @@ export namespace Prisma {
     power: number | null
     defense: number | null
     stamina: number | null
-    probability: number | null
     tierId: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -1024,7 +1020,6 @@ export namespace Prisma {
     power: number
     defense: number
     stamina: number
-    probability: number
     tierId: number
     createdAt: number
     updatedAt: number
@@ -1040,7 +1035,6 @@ export namespace Prisma {
     power?: true
     defense?: true
     stamina?: true
-    probability?: true
     tierId?: true
   }
 
@@ -1052,7 +1046,6 @@ export namespace Prisma {
     power?: true
     defense?: true
     stamina?: true
-    probability?: true
     tierId?: true
   }
 
@@ -1065,7 +1058,6 @@ export namespace Prisma {
     power?: true
     defense?: true
     stamina?: true
-    probability?: true
     tierId?: true
     createdAt?: true
     updatedAt?: true
@@ -1080,7 +1072,6 @@ export namespace Prisma {
     power?: true
     defense?: true
     stamina?: true
-    probability?: true
     tierId?: true
     createdAt?: true
     updatedAt?: true
@@ -1095,7 +1086,6 @@ export namespace Prisma {
     power?: true
     defense?: true
     stamina?: true
-    probability?: true
     tierId?: true
     createdAt?: true
     updatedAt?: true
@@ -1197,7 +1187,6 @@ export namespace Prisma {
     power: number
     defense: number
     stamina: number
-    probability: number
     tierId: number
     createdAt: Date
     updatedAt: Date
@@ -1231,7 +1220,6 @@ export namespace Prisma {
     power?: boolean
     defense?: boolean
     stamina?: boolean
-    probability?: boolean
     tierId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -1248,7 +1236,6 @@ export namespace Prisma {
     power?: boolean
     defense?: boolean
     stamina?: boolean
-    probability?: boolean
     tierId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -1272,7 +1259,6 @@ export namespace Prisma {
       power: number
       defense: number
       stamina: number
-      probability: number
       tierId: number
       createdAt: Date
       updatedAt: Date
@@ -1654,7 +1640,6 @@ export namespace Prisma {
     readonly power: FieldRef<"Players", 'Int'>
     readonly defense: FieldRef<"Players", 'Int'>
     readonly stamina: FieldRef<"Players", 'Int'>
-    readonly probability: FieldRef<"Players", 'Int'>
     readonly tierId: FieldRef<"Players", 'Int'>
     readonly createdAt: FieldRef<"Players", 'DateTime'>
     readonly updatedAt: FieldRef<"Players", 'DateTime'>
@@ -1985,34 +1970,34 @@ export namespace Prisma {
 
   export type TiersAvgAggregateOutputType = {
     tierId: number | null
-    chance: number | null
+    probability: number | null
     price: number | null
   }
 
   export type TiersSumAggregateOutputType = {
     tierId: number | null
-    chance: number | null
+    probability: number | null
     price: number | null
   }
 
   export type TiersMinAggregateOutputType = {
     tierId: number | null
     tierName: string | null
-    chance: number | null
+    probability: number | null
     price: number | null
   }
 
   export type TiersMaxAggregateOutputType = {
     tierId: number | null
     tierName: string | null
-    chance: number | null
+    probability: number | null
     price: number | null
   }
 
   export type TiersCountAggregateOutputType = {
     tierId: number
     tierName: number
-    chance: number
+    probability: number
     price: number
     _all: number
   }
@@ -2020,34 +2005,34 @@ export namespace Prisma {
 
   export type TiersAvgAggregateInputType = {
     tierId?: true
-    chance?: true
+    probability?: true
     price?: true
   }
 
   export type TiersSumAggregateInputType = {
     tierId?: true
-    chance?: true
+    probability?: true
     price?: true
   }
 
   export type TiersMinAggregateInputType = {
     tierId?: true
     tierName?: true
-    chance?: true
+    probability?: true
     price?: true
   }
 
   export type TiersMaxAggregateInputType = {
     tierId?: true
     tierName?: true
-    chance?: true
+    probability?: true
     price?: true
   }
 
   export type TiersCountAggregateInputType = {
     tierId?: true
     tierName?: true
-    chance?: true
+    probability?: true
     price?: true
     _all?: true
   }
@@ -2141,7 +2126,7 @@ export namespace Prisma {
   export type TiersGroupByOutputType = {
     tierId: number
     tierName: string
-    chance: number
+    probability: number
     price: number
     _count: TiersCountAggregateOutputType | null
     _avg: TiersAvgAggregateOutputType | null
@@ -2167,7 +2152,7 @@ export namespace Prisma {
   export type TiersSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     tierId?: boolean
     tierName?: boolean
-    chance?: boolean
+    probability?: boolean
     price?: boolean
     players?: boolean | Tiers$playersArgs<ExtArgs>
     _count?: boolean | TiersCountOutputTypeDefaultArgs<ExtArgs>
@@ -2177,7 +2162,7 @@ export namespace Prisma {
   export type TiersSelectScalar = {
     tierId?: boolean
     tierName?: boolean
-    chance?: boolean
+    probability?: boolean
     price?: boolean
   }
 
@@ -2194,7 +2179,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       tierId: number
       tierName: string
-      chance: number
+      probability: number
       price: number
     }, ExtArgs["result"]["tiers"]>
     composites: {}
@@ -2568,7 +2553,7 @@ export namespace Prisma {
   interface TiersFieldRefs {
     readonly tierId: FieldRef<"Tiers", 'Int'>
     readonly tierName: FieldRef<"Tiers", 'String'>
-    readonly chance: FieldRef<"Tiers", 'Int'>
+    readonly probability: FieldRef<"Tiers", 'Int'>
     readonly price: FieldRef<"Tiers", 'Int'>
   }
     
@@ -2926,7 +2911,6 @@ export namespace Prisma {
     power: 'power',
     defense: 'defense',
     stamina: 'stamina',
-    probability: 'probability',
     tierId: 'tierId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -2938,7 +2922,7 @@ export namespace Prisma {
   export const TiersScalarFieldEnum: {
     tierId: 'tierId',
     tierName: 'tierName',
-    chance: 'chance',
+    probability: 'probability',
     price: 'price'
   };
 
@@ -3001,7 +2985,6 @@ export namespace Prisma {
     power?: IntFilter<"Players"> | number
     defense?: IntFilter<"Players"> | number
     stamina?: IntFilter<"Players"> | number
-    probability?: IntFilter<"Players"> | number
     tierId?: IntFilter<"Players"> | number
     createdAt?: DateTimeFilter<"Players"> | Date | string
     updatedAt?: DateTimeFilter<"Players"> | Date | string
@@ -3017,7 +3000,6 @@ export namespace Prisma {
     power?: SortOrder
     defense?: SortOrder
     stamina?: SortOrder
-    probability?: SortOrder
     tierId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -3036,7 +3018,6 @@ export namespace Prisma {
     power?: IntFilter<"Players"> | number
     defense?: IntFilter<"Players"> | number
     stamina?: IntFilter<"Players"> | number
-    probability?: IntFilter<"Players"> | number
     tierId?: IntFilter<"Players"> | number
     createdAt?: DateTimeFilter<"Players"> | Date | string
     updatedAt?: DateTimeFilter<"Players"> | Date | string
@@ -3052,7 +3033,6 @@ export namespace Prisma {
     power?: SortOrder
     defense?: SortOrder
     stamina?: SortOrder
-    probability?: SortOrder
     tierId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -3075,7 +3055,6 @@ export namespace Prisma {
     power?: IntWithAggregatesFilter<"Players"> | number
     defense?: IntWithAggregatesFilter<"Players"> | number
     stamina?: IntWithAggregatesFilter<"Players"> | number
-    probability?: IntWithAggregatesFilter<"Players"> | number
     tierId?: IntWithAggregatesFilter<"Players"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Players"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Players"> | Date | string
@@ -3087,7 +3066,7 @@ export namespace Prisma {
     NOT?: TiersWhereInput | TiersWhereInput[]
     tierId?: IntFilter<"Tiers"> | number
     tierName?: StringFilter<"Tiers"> | string
-    chance?: IntFilter<"Tiers"> | number
+    probability?: IntFilter<"Tiers"> | number
     price?: IntFilter<"Tiers"> | number
     players?: PlayersListRelationFilter
   }
@@ -3095,7 +3074,7 @@ export namespace Prisma {
   export type TiersOrderByWithRelationInput = {
     tierId?: SortOrder
     tierName?: SortOrder
-    chance?: SortOrder
+    probability?: SortOrder
     price?: SortOrder
     players?: PlayersOrderByRelationAggregateInput
   }
@@ -3106,7 +3085,7 @@ export namespace Prisma {
     OR?: TiersWhereInput[]
     NOT?: TiersWhereInput | TiersWhereInput[]
     tierName?: StringFilter<"Tiers"> | string
-    chance?: IntFilter<"Tiers"> | number
+    probability?: IntFilter<"Tiers"> | number
     price?: IntFilter<"Tiers"> | number
     players?: PlayersListRelationFilter
   }, "tierId">
@@ -3114,7 +3093,7 @@ export namespace Prisma {
   export type TiersOrderByWithAggregationInput = {
     tierId?: SortOrder
     tierName?: SortOrder
-    chance?: SortOrder
+    probability?: SortOrder
     price?: SortOrder
     _count?: TiersCountOrderByAggregateInput
     _avg?: TiersAvgOrderByAggregateInput
@@ -3129,7 +3108,7 @@ export namespace Prisma {
     NOT?: TiersScalarWhereWithAggregatesInput | TiersScalarWhereWithAggregatesInput[]
     tierId?: IntWithAggregatesFilter<"Tiers"> | number
     tierName?: StringWithAggregatesFilter<"Tiers"> | string
-    chance?: IntWithAggregatesFilter<"Tiers"> | number
+    probability?: IntWithAggregatesFilter<"Tiers"> | number
     price?: IntWithAggregatesFilter<"Tiers"> | number
   }
 
@@ -3141,7 +3120,6 @@ export namespace Prisma {
     power: number
     defense: number
     stamina: number
-    probability: number
     createdAt?: Date | string
     updatedAt?: Date | string
     tiers: TiersCreateNestedOneWithoutPlayersInput
@@ -3156,7 +3134,6 @@ export namespace Prisma {
     power: number
     defense: number
     stamina: number
-    probability: number
     tierId: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -3170,7 +3147,6 @@ export namespace Prisma {
     power?: IntFieldUpdateOperationsInput | number
     defense?: IntFieldUpdateOperationsInput | number
     stamina?: IntFieldUpdateOperationsInput | number
-    probability?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tiers?: TiersUpdateOneRequiredWithoutPlayersNestedInput
@@ -3185,7 +3161,6 @@ export namespace Prisma {
     power?: IntFieldUpdateOperationsInput | number
     defense?: IntFieldUpdateOperationsInput | number
     stamina?: IntFieldUpdateOperationsInput | number
-    probability?: IntFieldUpdateOperationsInput | number
     tierId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -3200,7 +3175,6 @@ export namespace Prisma {
     power: number
     defense: number
     stamina: number
-    probability: number
     tierId: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -3214,7 +3188,6 @@ export namespace Prisma {
     power?: IntFieldUpdateOperationsInput | number
     defense?: IntFieldUpdateOperationsInput | number
     stamina?: IntFieldUpdateOperationsInput | number
-    probability?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -3228,7 +3201,6 @@ export namespace Prisma {
     power?: IntFieldUpdateOperationsInput | number
     defense?: IntFieldUpdateOperationsInput | number
     stamina?: IntFieldUpdateOperationsInput | number
-    probability?: IntFieldUpdateOperationsInput | number
     tierId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -3236,7 +3208,7 @@ export namespace Prisma {
 
   export type TiersCreateInput = {
     tierName: string
-    chance: number
+    probability: number
     price: number
     players?: PlayersCreateNestedManyWithoutTiersInput
   }
@@ -3244,14 +3216,14 @@ export namespace Prisma {
   export type TiersUncheckedCreateInput = {
     tierId?: number
     tierName: string
-    chance: number
+    probability: number
     price: number
     players?: PlayersUncheckedCreateNestedManyWithoutTiersInput
   }
 
   export type TiersUpdateInput = {
     tierName?: StringFieldUpdateOperationsInput | string
-    chance?: IntFieldUpdateOperationsInput | number
+    probability?: IntFieldUpdateOperationsInput | number
     price?: IntFieldUpdateOperationsInput | number
     players?: PlayersUpdateManyWithoutTiersNestedInput
   }
@@ -3259,7 +3231,7 @@ export namespace Prisma {
   export type TiersUncheckedUpdateInput = {
     tierId?: IntFieldUpdateOperationsInput | number
     tierName?: StringFieldUpdateOperationsInput | string
-    chance?: IntFieldUpdateOperationsInput | number
+    probability?: IntFieldUpdateOperationsInput | number
     price?: IntFieldUpdateOperationsInput | number
     players?: PlayersUncheckedUpdateManyWithoutTiersNestedInput
   }
@@ -3267,20 +3239,20 @@ export namespace Prisma {
   export type TiersCreateManyInput = {
     tierId?: number
     tierName: string
-    chance: number
+    probability: number
     price: number
   }
 
   export type TiersUpdateManyMutationInput = {
     tierName?: StringFieldUpdateOperationsInput | string
-    chance?: IntFieldUpdateOperationsInput | number
+    probability?: IntFieldUpdateOperationsInput | number
     price?: IntFieldUpdateOperationsInput | number
   }
 
   export type TiersUncheckedUpdateManyInput = {
     tierId?: IntFieldUpdateOperationsInput | number
     tierName?: StringFieldUpdateOperationsInput | string
-    chance?: IntFieldUpdateOperationsInput | number
+    probability?: IntFieldUpdateOperationsInput | number
     price?: IntFieldUpdateOperationsInput | number
   }
 
@@ -3334,7 +3306,6 @@ export namespace Prisma {
     power?: SortOrder
     defense?: SortOrder
     stamina?: SortOrder
-    probability?: SortOrder
     tierId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -3348,7 +3319,6 @@ export namespace Prisma {
     power?: SortOrder
     defense?: SortOrder
     stamina?: SortOrder
-    probability?: SortOrder
     tierId?: SortOrder
   }
 
@@ -3361,7 +3331,6 @@ export namespace Prisma {
     power?: SortOrder
     defense?: SortOrder
     stamina?: SortOrder
-    probability?: SortOrder
     tierId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -3376,7 +3345,6 @@ export namespace Prisma {
     power?: SortOrder
     defense?: SortOrder
     stamina?: SortOrder
-    probability?: SortOrder
     tierId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -3390,7 +3358,6 @@ export namespace Prisma {
     power?: SortOrder
     defense?: SortOrder
     stamina?: SortOrder
-    probability?: SortOrder
     tierId?: SortOrder
   }
 
@@ -3454,33 +3421,33 @@ export namespace Prisma {
   export type TiersCountOrderByAggregateInput = {
     tierId?: SortOrder
     tierName?: SortOrder
-    chance?: SortOrder
+    probability?: SortOrder
     price?: SortOrder
   }
 
   export type TiersAvgOrderByAggregateInput = {
     tierId?: SortOrder
-    chance?: SortOrder
+    probability?: SortOrder
     price?: SortOrder
   }
 
   export type TiersMaxOrderByAggregateInput = {
     tierId?: SortOrder
     tierName?: SortOrder
-    chance?: SortOrder
+    probability?: SortOrder
     price?: SortOrder
   }
 
   export type TiersMinOrderByAggregateInput = {
     tierId?: SortOrder
     tierName?: SortOrder
-    chance?: SortOrder
+    probability?: SortOrder
     price?: SortOrder
   }
 
   export type TiersSumOrderByAggregateInput = {
     tierId?: SortOrder
-    chance?: SortOrder
+    probability?: SortOrder
     price?: SortOrder
   }
 
@@ -3652,14 +3619,14 @@ export namespace Prisma {
 
   export type TiersCreateWithoutPlayersInput = {
     tierName: string
-    chance: number
+    probability: number
     price: number
   }
 
   export type TiersUncheckedCreateWithoutPlayersInput = {
     tierId?: number
     tierName: string
-    chance: number
+    probability: number
     price: number
   }
 
@@ -3681,14 +3648,14 @@ export namespace Prisma {
 
   export type TiersUpdateWithoutPlayersInput = {
     tierName?: StringFieldUpdateOperationsInput | string
-    chance?: IntFieldUpdateOperationsInput | number
+    probability?: IntFieldUpdateOperationsInput | number
     price?: IntFieldUpdateOperationsInput | number
   }
 
   export type TiersUncheckedUpdateWithoutPlayersInput = {
     tierId?: IntFieldUpdateOperationsInput | number
     tierName?: StringFieldUpdateOperationsInput | string
-    chance?: IntFieldUpdateOperationsInput | number
+    probability?: IntFieldUpdateOperationsInput | number
     price?: IntFieldUpdateOperationsInput | number
   }
 
@@ -3700,7 +3667,6 @@ export namespace Prisma {
     power: number
     defense: number
     stamina: number
-    probability: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -3714,7 +3680,6 @@ export namespace Prisma {
     power: number
     defense: number
     stamina: number
-    probability: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -3757,7 +3722,6 @@ export namespace Prisma {
     power?: IntFilter<"Players"> | number
     defense?: IntFilter<"Players"> | number
     stamina?: IntFilter<"Players"> | number
-    probability?: IntFilter<"Players"> | number
     tierId?: IntFilter<"Players"> | number
     createdAt?: DateTimeFilter<"Players"> | Date | string
     updatedAt?: DateTimeFilter<"Players"> | Date | string
@@ -3772,7 +3736,6 @@ export namespace Prisma {
     power: number
     defense: number
     stamina: number
-    probability: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -3785,7 +3748,6 @@ export namespace Prisma {
     power?: IntFieldUpdateOperationsInput | number
     defense?: IntFieldUpdateOperationsInput | number
     stamina?: IntFieldUpdateOperationsInput | number
-    probability?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -3799,7 +3761,6 @@ export namespace Prisma {
     power?: IntFieldUpdateOperationsInput | number
     defense?: IntFieldUpdateOperationsInput | number
     stamina?: IntFieldUpdateOperationsInput | number
-    probability?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -3813,7 +3774,6 @@ export namespace Prisma {
     power?: IntFieldUpdateOperationsInput | number
     defense?: IntFieldUpdateOperationsInput | number
     stamina?: IntFieldUpdateOperationsInput | number
-    probability?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
