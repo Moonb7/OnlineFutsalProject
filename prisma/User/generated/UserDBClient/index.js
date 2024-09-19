@@ -160,7 +160,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\KYH\\Desktop\\OnlineFutsal_Fork\\OnlineFutsalProject\\prisma\\user\\generated\\UserDBClient",
+      "value": "C:\\Users\\KYH\\Desktop\\OnlineFutsal_Fork\\OnlineFutsalProject\\prisma\\User\\generated\\UserDBClient",
       "fromEnvVar": null
     },
     "config": {
@@ -174,7 +174,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\KYH\\Desktop\\OnlineFutsal_Fork\\OnlineFutsalProject\\prisma\\user\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\KYH\\Desktop\\OnlineFutsal_Fork\\OnlineFutsalProject\\prisma\\User\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
