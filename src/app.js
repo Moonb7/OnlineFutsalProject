@@ -1,7 +1,10 @@
 import dotenv from "dotenv";
 import express from "express";
 import userPlayersRouter from "./routes/userPlayers.router.js";
+import { gamePrisma } from "./utils/prisma/index.js";
 dotenv.config();
+
+const result = await gamePrisma.player.findMany();
 
 const app = express();
 
