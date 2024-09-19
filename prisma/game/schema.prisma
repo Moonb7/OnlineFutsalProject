@@ -5,7 +5,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
+  url      = env("DATABASE_GAME_URL")
 }
 
 model Players {
@@ -17,7 +17,6 @@ model Players {
   power         Int
   defense       Int
   stamina       Int
-  probability   Int
   tierId        Int          
   tiers         Tiers       @relation(fields: [tierId], references: [tierId], onDelete: Cascade)
 
@@ -30,7 +29,7 @@ model Players {
 model Tiers {
   tierId        Int         @id @default(autoincrement())
   tierName      String      
-  chance        Int
+  probability   Int
   price         Int
 
   players       Players[]

@@ -141,7 +141,9 @@ exports.Prisma.UserPlayersScalarFieldEnum = {
 exports.Prisma.TeamsScalarFieldEnum = {
   teamId: 'teamId',
   userId: 'userId',
-  userPlayerId: 'userPlayerId',
+  userPlayerId1: 'userPlayerId1',
+  userPlayerId2: 'userPlayerId2',
+  userPlayerId3: 'userPlayerId3',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -150,7 +152,7 @@ exports.Prisma.CachesScalarFieldEnum = {
   cacheId: 'cacheId',
   userId: 'userId',
   cacheChange: 'cacheChange',
-  type: 'type',
+  cacheSource: 'cacheSource',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
