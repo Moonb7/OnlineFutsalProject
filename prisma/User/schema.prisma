@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+  output = "./generated/UserDBClient"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  userId        Int         @id @default(autoincrement())
+  name          String      @unique
+  password      String        
+  rating        Int         @default(1000)
+
+  createdAt     DateTime    @default(now()) 
+  updatedAt     DateTime    @updatedAt
+
+  userPlayers  UserPlayers[]
+  teams        Teams[]
+  Caches       Caches[]
+  Users        MatchLogs[]   @relation("Users")
+  EnemyUsers   MatchLogs[]   @relation("EnemyUsers")
+
+  @@map("Users")
+}
+
+model UserPlayers {
+  userPlayerId  Int         @id @default(autoincrement())
+  userId        Int
+  users         Users       @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  playerId      Int
+
+  count         Int
+  upgrade       Int         @default(1)
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt 
+
+  teams         Teams[]
+
+  @@map("UserPlayers")
+}
+
+model Teams {
+  teamId        Int         @id @default(autoincrement())
+  userId        Int
+  users         Users       @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  userPlayerId  Int
+  userPlayers   UserPlayers @relation(fields: [userPlayerId], references: [userPlayerId], onDelete: Cascade)
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt 
+
+  @@map("Teams")
+}
+
+model Caches {
+  cacheId       Int         @id @default(autoincrement())
+  userId        Int
+  users         Users       @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  cacheChange   Int
+  type          String      
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt 
+
+  @@map("Caches")
+}
+
+model MatchLogs {
+  matchLogId    Int         @id @default(autoincrement())
+  userId        Int 
+  Users         Users       @relation("Users", fields: [userId], references: [userId])      
+  enemyUserId   Int  
+  EnemyUsers    Users       @relation("EnemyUsers", fields: [enemyUserId], references: [userId])  
+
+  isWin         Int
+  playedAt      DateTime    @default(now())
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@map("MatchLogs")
+}

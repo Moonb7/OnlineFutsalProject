@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/gameDBClient"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Players {
+  playerId    Int    @id @default(autoincrement())
+  name        String @unique
+  position    Int
+  speed       Int
+  decision    Int
+  power       Int
+  defense     Int
+  stamina     Int
+  probability Int
+  tierId      Int
+  tiers       Tiers  @relation(fields: [tierId], references: [tierId], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("Players")
+}
+
+model Tiers {
+  tierId   Int    @id @default(autoincrement())
+  tierName String
+  chance   Int
+  price    Int
+
+  players Players[]
+
+  @@map("Tiers")
+}
