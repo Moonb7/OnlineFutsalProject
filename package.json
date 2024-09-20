@@ -5,9 +5,9 @@
   "repository": "https://github.com/OnlineFutsal/OnlineFutsalProject.git",
   "author": "Young-Hyun Kwon <ehe151@naver.com>",
   "license": "MIT",
-  "type" : "module",
+  "type": "module",
   "scripts": {
-    "format" : "prettier --write ."
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@prisma/client": "^5.19.1",

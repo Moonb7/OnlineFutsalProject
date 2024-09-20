@@ -1,3 +1,4 @@
+import { PrismaClient } from "@prisma/client";
 import { PrismaClient as GameDataClient } from "../../../prisma/game/generated/gameDBClient/index.js";
 import { PrismaClient as UserDataClient } from "../../../prisma/user/generated/userDBClient/index.js";
 
@@ -33,3 +34,9 @@ export const userPrisma = new UserDataClient({
   log: ["query", "info", "warn", "error"],
   errorFormat: "pretty",
 });
+
+// 혹시 몰라서 남겨놓겠습니다... (DB 하나에 모든 테이블을 저장)
+// export const prisma = new PrismaClient({
+//   log: ["query", "info", "warn", "error"],
+//   errorFormat: "pretty",
+// });

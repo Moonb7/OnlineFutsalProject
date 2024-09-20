@@ -9,83 +9,75 @@ datasource db {
 }
 
 model Users {
-  userId   Int    @id @default(autoincrement())
-  name     String @unique
-  password String
-  rating   Int    @default(1000)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  userPlayers UserPlayers[]
-  teams       Teams[]
+  userId      Int           @id @default(autoincrement())
+  name        String        @unique
+  password    String
+  rating      Int           @default(1000)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
   Caches      Caches[]
-  Users       MatchLogs[]   @relation("Users")
   EnemyUsers  MatchLogs[]   @relation("EnemyUsers")
+  Users       MatchLogs[]   @relation("Users")
+  teams       Teams[]
+  userPlayers UserPlayers[]
 
   @@map("Users")
 }
 
 model UserPlayers {
-  userPlayerId Int   @id @default(autoincrement())
+  userPlayerId Int      @id @default(autoincrement())
   userId       Int
-  users        Users @relation(fields: [userId], references: [userId], onDelete: Cascade)
   playerId     Int
-
-  count   Int
-  upgrade Int @default(1)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  UserPlayer1 Teams[] @relation("UserPlayer1")
-  UserPlayer2 Teams[] @relation("UserPlayer2")
-  UserPlayer3 Teams[] @relation("UserPlayer3")
+  count        Int
+  upgrade      Int      @default(1)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  UserPlayer1  Teams[]  @relation("UserPlayer1")
+  UserPlayer2  Teams[]  @relation("UserPlayer2")
+  UserPlayer3  Teams[]  @relation("UserPlayer3")
+  users        Users    @relation(fields: [userId], references: [userId], onDelete: Cascade)
 
   @@map("UserPlayers")
 }
 
 model Teams {
-  teamId        Int         @id @default(autoincrement())
+  teamId        Int          @id @default(autoincrement())
   userId        Int
-  users         Users       @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  userPlayerId1 Int
-  UserPlayer1   UserPlayers @relation("UserPlayer1", fields: [userPlayerId1], references: [userPlayerId], onDelete: Cascade)
-  userPlayerId2 Int
-  UserPlayer2   UserPlayers @relation("UserPlayer2", fields: [userPlayerId2], references: [userPlayerId], onDelete: Cascade)
-  userPlayerId3 Int
-  UserPlayer3   UserPlayers @relation("UserPlayer3", fields: [userPlayerId3], references: [userPlayerId], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  userPlayerId1 Int?
+  userPlayerId2 Int?
+  userPlayerId3 Int?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  users         Users        @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  UserPlayer1   UserPlayers? @relation("UserPlayer1", fields: [userPlayerId1], references: [userPlayerId], onDelete: Cascade)
+  UserPlayer2   UserPlayers? @relation("UserPlayer2", fields: [userPlayerId2], references: [userPlayerId], onDelete: Cascade)
+  UserPlayer3   UserPlayers? @relation("UserPlayer3", fields: [userPlayerId3], references: [userPlayerId], onDelete: Cascade)
 
   @@map("Teams")
 }
 
 model Caches {
-  cacheId     Int   @id @default(autoincrement())
+  cacheId     Int      @id @default(autoincrement())
   userId      Int
-  users       Users @relation(fields: [userId], references: [userId], onDelete: Cascade)
   cacheChange Int
   cacheSource Int
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  users       Users    @relation(fields: [userId], references: [userId], onDelete: Cascade)
 
   @@map("Caches")
 }
 
 model MatchLogs {
-  matchLogId  Int   @id @default(autoincrement())
+  matchLogId  Int      @id @default(autoincrement())
   userId      Int
-  Users       Users @relation("Users", fields: [userId], references: [userId])
   enemyUserId Int
-  EnemyUsers  Users @relation("EnemyUsers", fields: [enemyUserId], references: [userId])
-
-  isWin     Int
-  playedAt  DateTime @default(now())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  isWin       Int
+  playedAt    DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  EnemyUsers  Users    @relation("EnemyUsers", fields: [enemyUserId], references: [userId])
+  Users       Users    @relation("Users", fields: [userId], references: [userId])
 
   @@map("MatchLogs")
 }
