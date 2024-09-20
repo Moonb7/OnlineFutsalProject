@@ -4390,6 +4390,7 @@ export namespace Prisma {
     userId: number | null
     cacheChange: number | null
     cacheSource: number | null
+    cacheComment: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4399,6 +4400,7 @@ export namespace Prisma {
     userId: number | null
     cacheChange: number | null
     cacheSource: number | null
+    cacheComment: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4408,6 +4410,7 @@ export namespace Prisma {
     userId: number
     cacheChange: number
     cacheSource: number
+    cacheComment: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -4433,6 +4436,7 @@ export namespace Prisma {
     userId?: true
     cacheChange?: true
     cacheSource?: true
+    cacheComment?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4442,6 +4446,7 @@ export namespace Prisma {
     userId?: true
     cacheChange?: true
     cacheSource?: true
+    cacheComment?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4451,6 +4456,7 @@ export namespace Prisma {
     userId?: true
     cacheChange?: true
     cacheSource?: true
+    cacheComment?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -4547,6 +4553,7 @@ export namespace Prisma {
     userId: number
     cacheChange: number
     cacheSource: number
+    cacheComment: string
     createdAt: Date
     updatedAt: Date
     _count: CachesCountAggregateOutputType | null
@@ -4575,6 +4582,7 @@ export namespace Prisma {
     userId?: boolean
     cacheChange?: boolean
     cacheSource?: boolean
+    cacheComment?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     users?: boolean | UsersDefaultArgs<ExtArgs>
@@ -4586,6 +4594,7 @@ export namespace Prisma {
     userId?: boolean
     cacheChange?: boolean
     cacheSource?: boolean
+    cacheComment?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -4604,6 +4613,7 @@ export namespace Prisma {
       userId: number
       cacheChange: number
       cacheSource: number
+      cacheComment: string
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["caches"]>
@@ -4980,6 +4990,7 @@ export namespace Prisma {
     readonly userId: FieldRef<"Caches", 'Int'>
     readonly cacheChange: FieldRef<"Caches", 'Int'>
     readonly cacheSource: FieldRef<"Caches", 'Int'>
+    readonly cacheComment: FieldRef<"Caches", 'String'>
     readonly createdAt: FieldRef<"Caches", 'DateTime'>
     readonly updatedAt: FieldRef<"Caches", 'DateTime'>
   }
@@ -6303,6 +6314,7 @@ export namespace Prisma {
     userId: 'userId',
     cacheChange: 'cacheChange',
     cacheSource: 'cacheSource',
+    cacheComment: 'cacheComment',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -6609,6 +6621,7 @@ export namespace Prisma {
     userId?: IntFilter<"Caches"> | number
     cacheChange?: IntFilter<"Caches"> | number
     cacheSource?: IntFilter<"Caches"> | number
+    cacheComment?: StringFilter<"Caches"> | string
     createdAt?: DateTimeFilter<"Caches"> | Date | string
     updatedAt?: DateTimeFilter<"Caches"> | Date | string
     users?: XOR<UsersRelationFilter, UsersWhereInput>
@@ -6619,6 +6632,7 @@ export namespace Prisma {
     userId?: SortOrder
     cacheChange?: SortOrder
     cacheSource?: SortOrder
+    cacheComment?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     users?: UsersOrderByWithRelationInput
@@ -6632,6 +6646,7 @@ export namespace Prisma {
     userId?: IntFilter<"Caches"> | number
     cacheChange?: IntFilter<"Caches"> | number
     cacheSource?: IntFilter<"Caches"> | number
+    cacheComment?: StringFilter<"Caches"> | string
     createdAt?: DateTimeFilter<"Caches"> | Date | string
     updatedAt?: DateTimeFilter<"Caches"> | Date | string
     users?: XOR<UsersRelationFilter, UsersWhereInput>
@@ -6642,6 +6657,7 @@ export namespace Prisma {
     userId?: SortOrder
     cacheChange?: SortOrder
     cacheSource?: SortOrder
+    cacheComment?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CachesCountOrderByAggregateInput
@@ -6659,6 +6675,7 @@ export namespace Prisma {
     userId?: IntWithAggregatesFilter<"Caches"> | number
     cacheChange?: IntWithAggregatesFilter<"Caches"> | number
     cacheSource?: IntWithAggregatesFilter<"Caches"> | number
+    cacheComment?: StringWithAggregatesFilter<"Caches"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Caches"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Caches"> | Date | string
   }
@@ -6957,6 +6974,7 @@ export namespace Prisma {
   export type CachesCreateInput = {
     cacheChange: number
     cacheSource: number
+    cacheComment: string
     createdAt?: Date | string
     updatedAt?: Date | string
     users: UsersCreateNestedOneWithoutCachesInput
@@ -6967,6 +6985,7 @@ export namespace Prisma {
     userId: number
     cacheChange: number
     cacheSource: number
+    cacheComment: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -6974,6 +6993,7 @@ export namespace Prisma {
   export type CachesUpdateInput = {
     cacheChange?: IntFieldUpdateOperationsInput | number
     cacheSource?: IntFieldUpdateOperationsInput | number
+    cacheComment?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UsersUpdateOneRequiredWithoutCachesNestedInput
@@ -6984,6 +7004,7 @@ export namespace Prisma {
     userId?: IntFieldUpdateOperationsInput | number
     cacheChange?: IntFieldUpdateOperationsInput | number
     cacheSource?: IntFieldUpdateOperationsInput | number
+    cacheComment?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -6993,6 +7014,7 @@ export namespace Prisma {
     userId: number
     cacheChange: number
     cacheSource: number
+    cacheComment: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -7000,6 +7022,7 @@ export namespace Prisma {
   export type CachesUpdateManyMutationInput = {
     cacheChange?: IntFieldUpdateOperationsInput | number
     cacheSource?: IntFieldUpdateOperationsInput | number
+    cacheComment?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7009,6 +7032,7 @@ export namespace Prisma {
     userId?: IntFieldUpdateOperationsInput | number
     cacheChange?: IntFieldUpdateOperationsInput | number
     cacheSource?: IntFieldUpdateOperationsInput | number
+    cacheComment?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7377,6 +7401,7 @@ export namespace Prisma {
     userId?: SortOrder
     cacheChange?: SortOrder
     cacheSource?: SortOrder
+    cacheComment?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -7393,6 +7418,7 @@ export namespace Prisma {
     userId?: SortOrder
     cacheChange?: SortOrder
     cacheSource?: SortOrder
+    cacheComment?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -7402,6 +7428,7 @@ export namespace Prisma {
     userId?: SortOrder
     cacheChange?: SortOrder
     cacheSource?: SortOrder
+    cacheComment?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -8070,6 +8097,7 @@ export namespace Prisma {
   export type CachesCreateWithoutUsersInput = {
     cacheChange: number
     cacheSource: number
+    cacheComment: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -8078,6 +8106,7 @@ export namespace Prisma {
     cacheId?: number
     cacheChange: number
     cacheSource: number
+    cacheComment: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -8230,6 +8259,7 @@ export namespace Prisma {
     userId?: IntFilter<"Caches"> | number
     cacheChange?: IntFilter<"Caches"> | number
     cacheSource?: IntFilter<"Caches"> | number
+    cacheComment?: StringFilter<"Caches"> | string
     createdAt?: DateTimeFilter<"Caches"> | Date | string
     updatedAt?: DateTimeFilter<"Caches"> | Date | string
   }
@@ -8986,6 +9016,7 @@ export namespace Prisma {
     cacheId?: number
     cacheChange: number
     cacheSource: number
+    cacheComment: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -9029,6 +9060,7 @@ export namespace Prisma {
   export type CachesUpdateWithoutUsersInput = {
     cacheChange?: IntFieldUpdateOperationsInput | number
     cacheSource?: IntFieldUpdateOperationsInput | number
+    cacheComment?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9037,6 +9069,7 @@ export namespace Prisma {
     cacheId?: IntFieldUpdateOperationsInput | number
     cacheChange?: IntFieldUpdateOperationsInput | number
     cacheSource?: IntFieldUpdateOperationsInput | number
+    cacheComment?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9045,6 +9078,7 @@ export namespace Prisma {
     cacheId?: IntFieldUpdateOperationsInput | number
     cacheChange?: IntFieldUpdateOperationsInput | number
     cacheSource?: IntFieldUpdateOperationsInput | number
+    cacheComment?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

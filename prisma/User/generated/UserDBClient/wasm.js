@@ -153,6 +153,7 @@ exports.Prisma.CachesScalarFieldEnum = {
   userId: 'userId',
   cacheChange: 'cacheChange',
   cacheSource: 'cacheSource',
+  cacheComment: 'cacheComment',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

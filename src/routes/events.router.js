@@ -1,4 +1,3 @@
-import dotenv from "dotenv";
 import express from "express";
 import { BadRequestError } from "../errors/BadRequestError.js";
 import { ForbiddenError } from "../errors/ForbiddenError.js";
@@ -16,8 +15,6 @@ import { createMatchLogToDB } from "../utils/prisma/mathLogs.prisma.js";
 import { findPlayerFromDB } from "../utils/prisma/players.prisma.js";
 import { findTeamFromDB } from "../utils/prisma/teams.prisma.js";
 import { updateUserRatingToDB } from "../utils/prisma/users.prisma.js";
-
-dotenv.config();
 
 const router = express.Router();
 
