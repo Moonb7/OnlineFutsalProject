@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import errorHandlingMiddleware from "./middlewares/errorHandling.middleware.js";
 import EventRouter from "./routes/events.router.js";
+import GachaRouter from "./routes/gacha.router.js";
 
 dotenv.config();
 
@@ -10,7 +11,7 @@ const PORT = process.env.SERVER_PORT;
 
 app.use(express.json());
 
-app.use("/api", [EventRouter]);
+app.use("/api", [EventRouter, GachaRouter]);
 
 app.use(errorHandlingMiddleware);
 
