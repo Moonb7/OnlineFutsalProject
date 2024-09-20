@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output = "./generated/gameDBClient"
+  output   = "./generated/gameDBClient"
 }
 
 datasource db {
@@ -9,30 +9,28 @@ datasource db {
 }
 
 model Players {
-  playerId      Int          @id @default(autoincrement())
-  name          String       @unique
-  position      Int       
-  speed         Int
-  decision      Int
-  power         Int
-  defense       Int
-  stamina       Int
-  tierId        Int          
-  tiers         Tiers       @relation(fields: [tierId], references: [tierId], onDelete: Cascade)
-
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt 
+  playerId  Int      @id @default(autoincrement())
+  name      String   @unique
+  position  Int
+  speed     Int
+  decision  Int
+  power     Int
+  defense   Int
+  stamina   Int
+  tierId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tiers     Tiers    @relation(fields: [tierId], references: [tierId], onDelete: Cascade)
 
   @@map("Players")
 }
 
 model Tiers {
-  tierId        Int         @id @default(autoincrement())
-  tierName      String      
-  probability   Int
-  price         Int
-
-  players       Players[]
+  tierId      Int       @id @default(autoincrement())
+  tierName    String
+  probability Int
+  price       Int
+  players     Players[]
 
   @@map("Tiers")
 }

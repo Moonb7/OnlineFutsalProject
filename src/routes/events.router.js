@@ -1,232 +1,132 @@
 import dotenv from "dotenv";
 import express from "express";
-import { gamePrisma, userPrisma } from "../utils/prisma/index.js";
+import { BadRequestError } from "../errors/BadRequestError.js";
+import { ForbiddenError } from "../errors/ForbiddenError.js";
+import { NotFoundError } from "../errors/NotFoundError.js";
+import {
+  getMatchResult,
+  getTeamScore,
+  MATCH_RESULT,
+} from "../utils/game/game.js";
+import {
+  teamIdBodyValidate,
+  teamIdParamValidate,
+} from "../utils/joi/teams.validation.js";
+import { createMatchLogToDB } from "../utils/prisma/mathLogs.prisma.js";
+import { findPlayerFromDB } from "../utils/prisma/players.prisma.js";
+import { findTeamFromDB } from "../utils/prisma/teams.prisma.js";
+import { updateUserRatingToDB } from "../utils/prisma/users.prisma.js";
 
 dotenv.config();
 
-const MATCH_RESULT = {
-  WIN: 1,
-  DRAW: 2,
-  LOSE: 3,
-};
-Object.freeze(MATCH_RESULT);
-
 const router = express.Router();
 
+/**  상대팀 지정 플레이 API **/
+// TODO : req 데이터로 userId, myTeam, enemyTeam 세팅
+// TODO : 승패에 따른 유저의 Rating 점수 반영
+// TODO : 선수의 강화(UserPlayer.upgrade) 수치에 따라 능력치를 강화
+// TODO : 유저 검사(처음, )를 할지 말지 고민 중
+// TODO : 무승부 처리를 어떻게 할까 (일정 범위?)
 router.patch("/events/matching/:teamId", async (req, res, next) => {
   try {
     const userId = 1; // req.header.authorization
-    const myTeamId = 1; // req.params
-    const enemyTeamId = 4; // req.body
+    const { myTeamId } = await teamIdParamValidate(req.params);
+    const { enemyTeamId } = await teamIdBodyValidate(req.body);
 
-    const myTeam = await userPrisma.teams.findFirst({
-      where: { userId: myTeamId },
-    });
+    const myTeam = await findTeamFromDB(myTeamId);
+    const enemyTeam = await findTeamFromDB(enemyTeamId);
 
-    const enemyTeam = await userPrisma.teams.findFirst({
-      where: { teamId: enemyTeamId },
-    });
+    // 내팀이 내 계정의 팀이 아닐 경우
+    if (myTeam.userId !== userId)
+      throw new ForbiddenError("내 팀이 아니므로 게임을 진행하실 수 없습니다.");
 
-    console.log({ myTeam, enemyTeam });
+    // 내팀과 상대팀의 소유자가 나일 경우
+    if (myTeam.userId === enemyTeam.userId)
+      throw new BadRequestError("내 팀끼리는 게임을 진행하실 수 없습니다.");
 
-    return res.status(200).json({ message: "상대팀 지정하여 플레이 테스트" });
+    // 본인 팀원 수가 3명 미만일 경우
+    if (!myTeam.UserPlayer1 || !myTeam.UserPlayer2 || !myTeam.UserPlayer3)
+      throw new BadRequestError(
+        "내 팀의 인원 수가 3명 미만이기 때문에 게임을 진행하실 수 없습니다.",
+      );
+
+    // 상대 팀원 수가 3명 미만일 경우
+    if (
+      !enemyTeam.UserPlayer1 ||
+      !enemyTeam.UserPlayer2 ||
+      !enemyTeam.UserPlayer3
+    )
+      throw new BadRequestError(
+        "내 팀의 인원 수가 3명 미만이기 때문에 게임을 진행하실 수 없습니다.",
+      );
+
+    const myTeamArr = [];
+    const enemyTeamArr = [];
+
+    for (let i = 1; i < 4; i++) {
+      const myPlayerId = myTeam[`UserPlayer` + i].playerId;
+      const myPlayer = await findPlayerFromDB(myPlayerId);
+
+      // 본인 플레이어 정보가 존재하지 않을 경우
+      if (!myPlayer)
+        throw new NotFoundError(
+          `내 팀 선수 중 '${myPlayerId}'의 선수 데이터가 존재하지 않습니다.`,
+        );
+
+      myTeamArr.push(myPlayer);
+
+      const enemyPlayerId = enemyTeam[`UserPlayer` + i].playerId;
+      const enemyPlayer = await findPlayerFromDB(enemyPlayerId);
+
+      // 상대 플레이어 정보가 존재하지 않을 경우
+      if (!myPlayer)
+        throw new NotFoundError(
+          `상대 팀 선수 중 '${enemyPlayerId}'의 선수 데이터가 존재하지 않습니다.`,
+        );
+
+      enemyTeamArr.push(enemyPlayer);
+    }
+
+    const myTeamScore = getTeamScore(myTeamArr);
+    const enemyTeamScore = getTeamScore(enemyTeamArr);
+
+    const matchResult = getMatchResult(myTeamScore, enemyTeamScore);
+
+    // 경기 결과에 대해 레이팅 점수를 반영한다.
+    // 승(+10 Point), 패(-10 Point)
+    // 먼저 본인 유저부터
+    // 다음 상대팀 유저
+    let myUser;
+    let enemyUser;
+    switch (matchResult.result) {
+      case MATCH_RESULT.WIN:
+        {
+          myUser = await updateUserRatingToDB(myTeam.userId, +10);
+          enemyUser = await updateUserRatingToDB(enemyTeam.userId, -10);
+        }
+        break;
+      case MATCH_RESULT.LOSE:
+        {
+          myUser = await updateUserRatingToDB(myTeam.userId, -10);
+          enemyUser = await updateUserRatingToDB(enemyTeam.userId, 10);
+        }
+        break;
+    }
+
+    // 경기 결과를 매치로그에 저장한다.
+    // - 우선 내 팀 기준의 MatchLog 만 저장하도록 한다.
+    const matchLog = await createMatchLogToDB(
+      myTeam.userId,
+      enemyTeam.userId,
+      matchResult.result,
+    );
+
+    return res
+      .status(200)
+      .json({ rating: myUser.rating, message: { matchResult } });
   } catch (error) {
     next(error);
   }
 });
-
-function getTeamScore(team, weight) {
-  let teamScore = 0;
-
-  for (let i = 0; i < 3; i++) {
-    let playerScore = 0;
-
-    for (const key in weight) {
-      playerScore += parseFloat((team[i][key] * weight[key]).toFixed(2));
-    }
-
-    console.log(team[i].name, " : ", playerScore);
-
-    teamScore += playerScore;
-  }
-
-  console.log(teamScore);
-
-  return teamScore;
-}
-
-async function getMatchResult(myTeamScore, enemyTeamScore) {
-  // 최대 점수는 두 팀의 총 점수의 합으로 하시면 됩니다!
-  const maxScore = myTeamScore + enemyTeamScore;
-  const randomValue = parseFloat(Math.random() * maxScore).toFixed(2);
-
-  console.log(randomValue, " => (", myTeamScore, ")");
-
-  if (randomValue < myTeamScore) {
-    // A 유저 승리 처리
-    const aScore = Math.floor(Math.random() * 4) + 2; // 2에서 5 사이
-    const bScore = Math.floor(Math.random() * Math.min(3, aScore)); // aScore보다 작은 값을 설정
-
-    return { result: MATCH_RESULT.WIN, score: `A - ${aScore} : ${bScore} - B` };
-  } else if (randomValue === myTeamScore) {
-    // 무승부 처리 (무승부 처리를 어떻게 해야할까... 일정 범위를 줘야하나)
-    const aScore = Math.floor(Math.random() * 6); // 0에서 5 사이
-    const bScore = aScore;
-
-    return {
-      result: MATCH_RESULT.DRAW,
-      score: `A - ${aScore} : ${bScore} - B`,
-    };
-  } else {
-    // B 유저 승리 처리
-    const bScore = Math.floor(Math.random() * 4) + 2; // 2에서 5 사이
-    const aScore = Math.floor(Math.random() * Math.min(3, bScore)); // bScore보다 작은 값을 설정
-
-    return {
-      result: MATCH_RESULT.LOSE,
-      score: `A - ${aScore} : ${bScore} - B`,
-    };
-  }
-}
-
-async function playing() {
-  const userId = 1; // req.header.authorization
-  const myTeamId = 1; // req.params
-  const enemyTeamId = 4; // req.body
-
-  const myTeam = await userPrisma.teams.findFirst({
-    where: { userId: myTeamId },
-    select: {
-      teamId: true,
-      userId: true,
-      UserPlayer1: true,
-      UserPlayer2: true,
-      UserPlayer3: true,
-    },
-  });
-
-  const enemyTeam = await userPrisma.teams.findFirst({
-    where: { teamId: enemyTeamId },
-    select: {
-      teamId: true,
-      userId: true,
-      UserPlayer1: true,
-      UserPlayer2: true,
-      UserPlayer3: true,
-    },
-  });
-
-  const myTeamArr = [];
-  const enemyTeamArr = [];
-
-  for (let i = 1; i < 4; i++) {
-    const myPlayerId = myTeam[`UserPlayer` + i].playerId;
-    const myPlayer = await gamePrisma.players.findFirst({
-      where: { playerId: myPlayerId },
-      select: {
-        speed: true,
-        decision: true,
-        power: true,
-        defense: true,
-        stamina: true,
-      },
-    });
-    myTeamArr.push(myPlayer);
-
-    const enemyPlayerId = enemyTeam[`UserPlayer` + i].playerId;
-    const enemyPlayer = await gamePrisma.players.findFirst({
-      where: { playerId: enemyPlayerId },
-      select: {
-        speed: true,
-        decision: true,
-        power: true,
-        defense: true,
-        stamina: true,
-      },
-    });
-    enemyTeamArr.push(enemyPlayer);
-  }
-
-  const weight = {
-    speed: 0.1,
-    decision: 0.25,
-    power: 0.15,
-    defense: 0.3,
-    stamina: 0.2,
-  };
-
-  const myTeamScore = getTeamScore(myTeamArr, weight);
-  const enemyTeamScore = getTeamScore(enemyTeamArr, weight);
-
-  console.log(myTeamScore, enemyTeamScore);
-
-  const matchResult = await getMatchResult(myTeamScore, enemyTeamScore);
-
-  // 경기 결과를 매치로그에 담자.
-  if (matchResult.result === MATCH_RESULT.WIN) {
-    // 우리 팀 기준 : 승리
-    await userPrisma.matchLogs.create({
-      data: {
-        userId: myTeam.userId,
-        enemyUserId: enemyTeam.userId,
-        isWin: MATCH_RESULT.WIN,
-      },
-    });
-
-    // 적 팀 기준: 패배
-    await userPrisma.matchLogs.create({
-      data: {
-        userId: enemyTeam.userId,
-        enemyUserId: myTeam.userId,
-        isWin: MATCH_RESULT.LOSE,
-      },
-    });
-  } else if (matchResult.result === MATCH_RESULT.DRAW) {
-    // 우리 팀 기준 : 무승부
-    await userPrisma.matchLogs.create({
-      data: {
-        userId: myTeam.userId,
-        enemyUserId: enemyTeam.userId,
-        isWin: MATCH_RESULT.DRAW,
-      },
-    });
-
-    // 적 팀 기준: 무승부
-    await userPrisma.matchLogs.create({
-      data: {
-        userId: enemyTeam.userId,
-        enemyUserId: myTeam.userId,
-        isWin: MATCH_RESULT.DRAW,
-      },
-    });
-  } else if (matchResult.result === MATCH_RESULT.LOSE) {
-    // 우리 팀 기준 : 패배
-    await userPrisma.matchLogs.create({
-      data: {
-        userId: myTeam.userId,
-        enemyUserId: enemyTeam.userId,
-        isWin: MATCH_RESULT.LOSE,
-      },
-    });
-
-    // 적 팀 기준: 승리
-    await userPrisma.matchLogs.create({
-      data: {
-        userId: enemyTeam.userId,
-        enemyUserId: myTeam.userId,
-        isWin: MATCH_RESULT.WIN,
-      },
-    });
-  } else {
-    // 승리, 무승부, 패배도 아니다?
-    // 서버 에러로 간주
-  }
-
-  return { message: { matchResult } };
-}
-
-const result = await test();
-
-console.log(result);
 
 export default router;
