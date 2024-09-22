@@ -6,6 +6,7 @@ import { BadRequestError } from "../errors/BadRequestError.js";
 import {
   teamIdParamValidate,
   teamInfoBodyValidate,
+  positionBodyValidate,
 } from "../utils/joi/teams.validation.js";
 
 const router = express.Router();
@@ -69,9 +70,7 @@ router.get("/team/:teamId", async (req, res, next) => {
   }
 });
 
-// 음 어떻게든 일단 구현을 했습니다만 코드가 많이 난잡하네요 일단 구현하고 시간될떄마다 리펙토링할 수 있으면 하겠습니다.
-// 시간되실때 한번 보시고 혹시 좋은 방법있으면 알려주시면 감사하겠습니다.
-// 선수 선발 등록 API 토큰없이 테스트 실제는 /team/:teamId로 실행하기
+// 선수 선발 등록 API 토큰없이 테스트
 router.post("/team/:teamId", async (req, res, next) => {
   try {
     const userId = 1;
@@ -85,8 +84,8 @@ router.post("/team/:teamId", async (req, res, next) => {
         userPlayerId: userPlayerId,
       },
     });
-    if (!userPlayer)
-      throw new NotFoundError("현재 소유하고 있는 선수가 아닙니다.");
+    if (!userPlayer || userPlayer.count <= 0)
+      throw new BadRequestError("현재 소유하고 있는 선수가 아닙니다.");
     if (+userId !== userPlayer.userId)
       throw new ConflictError("현재 계정의 선수가 아닙니다.");
 
@@ -128,8 +127,27 @@ router.post("/team/:teamId", async (req, res, next) => {
         message: `${player.name} 선수를 새로운 팀 ${team.teamId}번 팀에 등록했습니다.`,
       });
     }
-    if (team && +userId !== team.userId)
-      throw new ConflictError("현재 계정의 팀이 아닙니다.");
+
+    // 현재 계정의 팀이 아닐때 현재 계정이 가지고 있는 팀을 응답으로 보여줍니다.
+    if (+userId !== team.userId) {
+      const isTeamCountCheck = await userPrisma.teams.findMany({
+        where: {
+          userId: +userId,
+        },
+      });
+      return res.status(409).json({
+        message: "현재 계정의 팀이 아닙니다.",
+        yourTeamId1: isTeamCountCheck[0]
+          ? isTeamCountCheck[0].teamId
+          : "비어있음",
+        yourTeamId2: isTeamCountCheck[1]
+          ? isTeamCountCheck[1].teamId
+          : "비어있음",
+        yourTeamId3: isTeamCountCheck[2]
+          ? isTeamCountCheck[2].teamId
+          : "비어있음",
+      });
+    }
 
     // 여기서부턴 teamId로 찾은 팀이 있다는 과정하에 팀에 선수 등록 및 선수 위치 수정 등을 합니다.
 
@@ -174,13 +192,93 @@ router.post("/team/:teamId", async (req, res, next) => {
 });
 
 // 선수 후보 등록 API
-// 선수 한명한명씩 후보로 보내고 null로 만들고 모든 팀의 userPlayerId가 null일때
-router.delete("/team/:teamId", async (req, res, next) => {
-  const { userId } = req.params;
-  const { teamId } = req.params;
-  const { userPlayerId, teamPlayerNumber } = req.body;
+router.delete("/team/test1/:teamId", async (req, res, next) => {
+  try {
+    const userId = 1;
+    const { teamId } = await teamIdParamValidate(req.params);
+    const { position } = await positionBodyValidate(req.body);
 
-  return res.status(200).json({ message: "후보로 등록되었습니다." });
+    const isTeam = await userPrisma.teams.findFirst({
+      where: { teamId: +teamId },
+    });
+    if (!isTeam) throw new NotFoundError("팀이 존재 하지 않습니다.");
+
+    // 현재 계정의 팀이 아닐때 현재 계정이 가지고 있는 팀을 응답으로 보여줍니다.
+    if (+userId !== isTeam.userId) {
+      const isTeamCountCheck = await userPrisma.teams.findMany({
+        where: {
+          userId: +userId,
+        },
+      });
+      return res.status(409).json({
+        message: "현재 계정의 팀이 아닙니다.",
+        yourTeamId1: isTeamCountCheck[0]
+          ? isTeamCountCheck[0].teamId
+          : "비어있음",
+        yourTeamId2: isTeamCountCheck[1]
+          ? isTeamCountCheck[1].teamId
+          : "비어있음",
+        yourTeamId3: isTeamCountCheck[2]
+          ? isTeamCountCheck[2].teamId
+          : "비어있음",
+      });
+    }
+    if (!isTeam[`userPlayerId${position}`])
+      throw new BadRequestError("해당위치에 선수가 존재하지 않습니다.");
+
+    const userPlayer = await userPrisma.userPlayers.findFirst({
+      where: { userPlayerId: isTeam[`userPlayerId${position}`] },
+    });
+    if (!userPlayer)
+      throw new BadRequestError("현재 소유하고 있는 선수가 아닙니다.");
+
+    const player = await gamePrisma.players.findFirst({
+      where: { playerId: userPlayer.playerId },
+    });
+    if (!player) throw new NotFoundError("해당 선수 정보가 없습니다.");
+
+    // 팀 위치의 userPlayerId를 null로 변경 후보로 변경
+    await userPrisma.teams.update({
+      data: {
+        [`userPlayerId${position}`]: null,
+      },
+      where: { teamId: +teamId },
+    });
+
+    // 변경된 팀의 선수 명단을 확인합니다.
+    const renewalTeamUserPlayerIds = await userPrisma.teams.findFirst({
+      select: {
+        userPlayerId1: true,
+        userPlayerId2: true,
+        userPlayerId3: true,
+      },
+      where: { teamId: +teamId },
+    });
+
+    const userPlayerIds = Object.values(renewalTeamUserPlayerIds);
+
+    let isUserPlayerIdCheck = false;
+    for (let i = 0; i < userPlayerIds.length; i++) {
+      // 팀에 선수 한명이라도 있으면 isUserPlayerIdCheck = true;
+      if (userPlayerIds[i]) {
+        isUserPlayerIdCheck = true;
+        break;
+      }
+    }
+
+    // 모든 위치에 선수가 없으면 팀 레코드 삭제
+    if (!isUserPlayerIdCheck) {
+      await userPrisma.teams.delete({
+        where: { teamId: +teamId },
+      });
+    }
+
+    return res
+      .status(200)
+      .json({ message: `${player.name} 선수를 후보로 등록 되었습니다.` });
+  } catch (err) {
+    next(err);
+  }
 });
 
 export default router;
