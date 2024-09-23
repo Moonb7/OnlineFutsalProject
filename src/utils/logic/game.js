@@ -13,13 +13,23 @@ export const MATCH_RESULT = {
 };
 Object.freeze(MATCH_RESULT);
 
+export const MATCH_RATING_SCORE = 10;
+
 export function getTeamScore(team) {
   let teamScore = 0;
 
   for (let i = 0; i < 3; i++) {
     let playerScore = 0;
+    const playerExtraStat = team[i].player.tiers.extraStat;
+    const playerUpgrade = team[i].upgrade;
+
     for (const key in PLAYER_WEIGHT) {
-      playerScore += parseFloat((team[i][key] * PLAYER_WEIGHT[key]).toFixed(2));
+      playerScore += parseFloat(
+        (
+          (team[i].player[key] + playerExtraStat * playerUpgrade) *
+          PLAYER_WEIGHT[key]
+        ).toFixed(2),
+      );
     }
     teamScore += playerScore;
   }
@@ -32,15 +42,29 @@ export function getMatchResult(myTeamScore, enemyTeamScore) {
   const maxScore = myTeamScore + enemyTeamScore;
   const randomValue = parseFloat(Math.random() * maxScore).toFixed(2);
 
-  console.log(randomValue, " => (", myTeamScore, ")");
+  // 무승부 처리는 점수가 작은 팀의 총 점수의 10%를 범위로 하여 처리한다.
+  const drawRangeValue = parseFloat(
+    (Math.min(myTeamScore, enemyTeamScore) / 10).toFixed(2),
+  );
 
-  if (randomValue < myTeamScore) {
+  console.log(
+    myTeamScore,
+    enemyTeamScore,
+    myTeamScore - drawRangeValue,
+    myTeamScore + drawRangeValue,
+  );
+  console.log(randomValue, " => (", myTeamScore - drawRangeValue, ")");
+
+  if (randomValue <= myTeamScore - drawRangeValue) {
     // A 유저 승리 처리
     const aScore = Math.floor(Math.random() * 4) + 2; // 2에서 5 사이
     const bScore = Math.floor(Math.random() * Math.min(3, aScore)); // aScore보다 작은 값을 설정
 
     return { result: MATCH_RESULT.WIN, score: `A - ${aScore} : ${bScore} - B` };
-  } else if (randomValue === myTeamScore) {
+  } else if (
+    randomValue > myTeamScore - drawRangeValue &&
+    randomValue < myTeamScore + drawRangeValue
+  ) {
     // 무승부 처리 (무승부 처리를 어떻게 해야할까... 일정 범위를 줘야하나)
     const aScore = Math.floor(Math.random() * 6); // 0에서 5 사이
     const bScore = aScore;
@@ -59,4 +83,22 @@ export function getMatchResult(myTeamScore, enemyTeamScore) {
       score: `A - ${aScore} : ${bScore} - B`,
     };
   }
+}
+
+export function getBonusRatingScore(myTeamScore, enemyTeamScore, matchResult) {
+  if (matchResult === MATCH_RESULT.DRAW) return MATCH_RATING_SCORE;
+
+  const bonusRatingScore = Math.floor(
+    (MATCH_RATING_SCORE * Math.abs(myTeamScore - enemyTeamScore)) /
+      (myTeamScore + enemyTeamScore),
+  );
+
+  if (matchResult === MATCH_RESULT.WIN)
+    return myTeamScore < enemyTeamScore
+      ? MATCH_RATING_SCORE + bonusRatingScore
+      : MATCH_RATING_SCORE - bonusRatingScore;
+  else
+    return myTeamScore < enemyTeamScore
+      ? MATCH_RATING_SCORE - bonusRatingScore
+      : MATCH_RATING_SCORE + bonusRatingScore;
 }
