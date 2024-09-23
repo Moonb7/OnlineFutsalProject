@@ -23,7 +23,6 @@ import {
 const router = express.Router();
 
 /**  상대팀 지정 플레이 API **/
-// TODO : 선수의 강화(UserPlayer.upgrade) 수치에 따라 능력치를 강화
 // TODO : 유저 검사(처음, )를 할지 말지 고민 중
 router.patch("/events/matching/:teamId", async (req, res, next) => {
   try {
@@ -33,6 +32,18 @@ router.patch("/events/matching/:teamId", async (req, res, next) => {
 
     const myTeam = await findTeamFromDB(myTeamId);
     const enemyTeam = await findTeamFromDB(enemyTeamId);
+
+    // 내팀이 DB에 없는 경우
+    if (!myTeam)
+      throw new NotFoundError(
+        `(${myTeamId}) 내 팀의 데이터가 존재하지 않습니다.`,
+      );
+
+    // 상대팀이 DB에 없는 경우
+    if (!enemyTeam)
+      throw new NotFoundError(
+        `(${enemyTeam}) 상대팀의 데이터가 존재하지 않습니다.`,
+      );
 
     // 내팀이 내 계정의 팀이 아닐 경우
     if (myTeam.userId !== userId)
@@ -148,6 +159,35 @@ router.patch("/events/matching/:teamId", async (req, res, next) => {
     );
 
     return res.status(200).json({ message, rating: myUser.rating });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**  자동 매치메이킹 후 게임 플레이 API **/
+// TODO : 유저 검사(처음, )를 할지 말지 고민 중
+router.patch("/events/autoMatching/:teamId", async (req, res, next) => {
+  try {
+    const userId = 1; // req.header.authorization
+    const { teamId: myTeamId } = await teamIdParamValidate(req.params);
+    const { enemyTeamId } = await teamIdBodyValidate(req.body);
+
+    const myTeam = await findTeamFromDB(myTeamId);
+    //const enemyTeam = await findTeamFromDB(enemyTeamId);
+
+    // 내팀이 DB에 없는 경우
+    if (!myTeam)
+      throw new NotFoundError(`${myTeamId} 팀의 데이터가 존재하지 않습니다.`);
+
+    // 내팀이 내 계정의 팀이 아닐 경우
+    if (myTeam.userId !== userId)
+      throw new ForbiddenError("내 팀이 아니므로 게임을 진행하실 수 없습니다.");
+
+    // 본인 팀원 수가 3명 미만일 경우
+    if (!myTeam.UserPlayer1 || !myTeam.UserPlayer2 || !myTeam.UserPlayer3)
+      throw new BadRequestError(
+        "내 팀의 인원 수가 3명 미만이기 때문에 게임을 진행하실 수 없습니다.",
+      );
   } catch (error) {
     next(error);
   }

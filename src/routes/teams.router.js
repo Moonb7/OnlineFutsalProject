@@ -1,13 +1,13 @@
 import express from "express";
-import { userPrisma, gamePrisma } from "../utils/prisma/index.js";
+import { BadRequestError } from "../errors/BadRequestError.js";
 import { ConflictError } from "../errors/ConflictError.js";
 import { NotFoundError } from "../errors/NotFoundError.js";
-import { BadRequestError } from "../errors/BadRequestError.js";
 import {
+  positionBodyValidate,
   teamIdParamValidate,
   teamInfoBodyValidate,
-  positionBodyValidate,
 } from "../utils/joi/teams.validation.js";
+import { gamePrisma, userPrisma } from "../utils/prisma/index.js";
 
 const router = express.Router();
 
