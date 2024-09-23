@@ -94,14 +94,18 @@ router.get("/events/rank", async (req, res, next) => {
     //     });
 
     // 임시로 userId값을 지정하였습니다.
-    const userId = 2;
-    for (let i = 0; i < resultRanking.length; i++) {
-      if (userId && userId === resultRanking[i].userId) {
-        const userRankInfo = resultRanking[i];
-        return res.status(200).json({
-          userRankInfo,
-          RANKING: resultRanking,
-        });
+    const userId = 1;
+
+    // 유저Id가 있으면 로그인이 되어있다면 for문으로 해당 유저순위 정보 찾기
+    if (userId) {
+      for (let i = 0; i < resultRanking.length; i++) {
+        if (userId === resultRanking[i].userId) {
+          const userRankInfo = resultRanking[i];
+          return res.status(200).json({
+            userRankInfo,
+            RANKING: resultRanking,
+          });
+        }
       }
     }
 
