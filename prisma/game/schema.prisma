@@ -26,10 +26,14 @@ model Players {
 }
 
 model Tiers {
-  tierId      Int       @id @default(autoincrement())
-  tierName    String
-  probability Int
-  price       Int
+  tierId          Int       @id @default(autoincrement())
+  tierName        String
+  pickProbability Int
+  salePrice       Int
+  extraStat       Int
+  defaultUpgradeProbability   Int  
+  upgradeDecreaseProbability  Int
+  upgradePrice    Int
   players     Players[]
 
   @@map("Tiers")

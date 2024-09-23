@@ -136,8 +136,12 @@ exports.Prisma.PlayersScalarFieldEnum = {
 exports.Prisma.TiersScalarFieldEnum = {
   tierId: 'tierId',
   tierName: 'tierName',
-  probability: 'probability',
-  price: 'price'
+  pickProbability: 'pickProbability',
+  salePrice: 'salePrice',
+  extraStat: 'extraStat',
+  defaultUpgradeProbability: 'defaultUpgradeProbability',
+  upgradeDecreaseProbability: 'upgradeDecreaseProbability',
+  upgradePrice: 'upgradePrice'
 };
 
 exports.Prisma.SortOrder = {
