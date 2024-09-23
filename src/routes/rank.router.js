@@ -3,11 +3,6 @@ import { userPrisma } from "../utils/prisma/index.js";
 
 const router = express.Router();
 
-// 승 / 무 / 패 표시
-// 승률
-// 승리한 수/총 경기수 X 100을 하여 승률구하기
-// 랭킹은 점수가 높은순으로 정렬
-
 // 랭크 조회 API
 router.get("/events/rank", async (req, res, next) => {
   try {
@@ -17,6 +12,7 @@ router.get("/events/rank", async (req, res, next) => {
     // 최종적으로 userId마다(그룹으로 묶어서) 모든 경기 결과들을 합쳐서 출력하게 했습니다.
     const result = await userPrisma.$queryRaw`
     SELECT 
+      RANK() over (order by rating desc) as ranking,
       userId,
       name,
       rating,
@@ -53,32 +49,10 @@ router.get("/events/rank", async (req, res, next) => {
       GROUP BY 
         userId) a
     GROUP BY 
-      userId -- 최종 userId로 그룹화
+      userId
     ORDER BY 
       rating desc
   `;
-
-    // 최종적으로 결과 value형태를 재정립하여 json형태 객체를 만듭니다.
-    const resultRanking = [];
-    for (let i = 0; i < result.length; i++) {
-      const message = {
-        rank: i + 1,
-        userId: result[i].userId,
-        name: result[i].name,
-        rating: result[i].rating,
-        winPercentage: Math.round(result[i].winPercentage) + "%",
-        win: +`${result[i].win}`,
-        draw: +`${result[i].draw}`,
-        lose: +`${result[i].lose}`,
-      };
-
-      resultRanking.push(message);
-      // resultRanking[`Rank${i + 1}`] = message; // 점수순으로 내림차순하여 그냥 순서대로 순위를 매겨줍니다.
-
-      // 음 점수가 중복일수도 있을것 같은데 음 일단 순서대로 매기자 한번 물어보기
-      // 그럼 앞 순위에 있는 점수와 같은지를 확인하여 키 이름만 변경하자
-    }
-
     // 여기서 로그인한 상태면 순위를 다 매긴정보를 바로 해당 유저의 순위를 확인할 수 있게 상단에 표시
     // 헤더로 토큰을 받고 받은 토큰이 해당 로그인한 아이디가 맞으면
     // const { authorization } = req.headers;
@@ -94,22 +68,47 @@ router.get("/events/rank", async (req, res, next) => {
     //     });
 
     // 임시로 userId값을 지정하였습니다.
-    const userId = 1;
+    const userId = null;
 
-    // 유저Id가 있으면 로그인이 되어있다면 for문으로 해당 유저순위 정보 찾기
+    // 로그인한 유저가 있으면 길이를 그대로 가져오고 전부 반복하여 값을 가져오게 하였습니다.
+    // 유저가 없으면 값을 재정의할때 최대 10번만 반복하여 값을 가져오게 하였습니다.
+    const limitLength = 10;
+    const length = userId
+      ? result.length
+      : Math.min(result.length, limitLength);
+
+    const resultRankings = [];
+    for (let i = 0; i < length; i++) {
+      const rankInfo = {
+        ranking: Number(result[i].ranking),
+        userId: result[i].userId,
+        name: result[i].name,
+        rating: result[i].rating,
+        winPercentage: Math.round(result[i].winPercentage) + "%",
+        win: +result[i].win,
+        draw: +result[i].draw,
+        lose: +result[i].lose,
+      };
+
+      resultRankings.push(rankInfo);
+    }
+
+    // 유저Id가 있으면 로그인이 되어있다면 for문을 실행하여 해당 유저의 순위정보를 찾습니다.
     if (userId) {
-      for (let i = 0; i < resultRanking.length; i++) {
-        if (userId === resultRanking[i].userId) {
-          const userRankInfo = resultRanking[i];
+      for (let i = 0; i < resultRankings.length; i++) {
+        if (userId === resultRankings[i].userId) {
+          const userRankInfo = resultRankings[i];
+
+          const resultRankingsSlice = resultRankings.slice(0, limitLength); // 클라이언트에겐 최대 순위 10위까지만 출력하기위해 slice를 이용하였습니다.
           return res.status(200).json({
             userRankInfo,
-            RANKING: resultRanking,
+            RANKING: resultRankingsSlice,
           });
         }
       }
     }
 
-    return res.status(200).json({ RANKING: resultRanking });
+    return res.status(200).json({ RANKING: resultRankings });
   } catch (err) {
     next(err);
   }
