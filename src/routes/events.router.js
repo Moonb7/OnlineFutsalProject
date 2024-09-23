@@ -3,31 +3,32 @@ import { BadRequestError } from "../errors/BadRequestError.js";
 import { ForbiddenError } from "../errors/ForbiddenError.js";
 import { NotFoundError } from "../errors/NotFoundError.js";
 import {
-  getMatchResult,
-  getTeamScore,
-  MATCH_RESULT,
-} from "../utils/game/game.js";
-import {
   teamIdBodyValidate,
   teamIdParamValidate,
 } from "../utils/joi/teams.validation.js";
+import {
+  getBonusRatingScore,
+  getMatchResult,
+  getTeamScore,
+  MATCH_RESULT,
+} from "../utils/logic/game.js";
 import { createMatchLogToDB } from "../utils/prisma/mathLogs.prisma.js";
 import { findPlayerFromDB } from "../utils/prisma/players.prisma.js";
 import { findTeamFromDB } from "../utils/prisma/teams.prisma.js";
-import { updateUserRatingToDB } from "../utils/prisma/users.prisma.js";
+import {
+  findUserFromDB,
+  updateUserRatingToDB,
+} from "../utils/prisma/users.prisma.js";
 
 const router = express.Router();
 
 /**  상대팀 지정 플레이 API **/
-// TODO : req 데이터로 userId, myTeam, enemyTeam 세팅
-// TODO : 승패에 따른 유저의 Rating 점수 반영
 // TODO : 선수의 강화(UserPlayer.upgrade) 수치에 따라 능력치를 강화
 // TODO : 유저 검사(처음, )를 할지 말지 고민 중
-// TODO : 무승부 처리를 어떻게 할까 (일정 범위?)
 router.patch("/events/matching/:teamId", async (req, res, next) => {
   try {
     const userId = 1; // req.header.authorization
-    const { myTeamId } = await teamIdParamValidate(req.params);
+    const { teamId: myTeamId } = await teamIdParamValidate(req.params);
     const { enemyTeamId } = await teamIdBodyValidate(req.body);
 
     const myTeam = await findTeamFromDB(myTeamId);
@@ -54,7 +55,7 @@ router.patch("/events/matching/:teamId", async (req, res, next) => {
       !enemyTeam.UserPlayer3
     )
       throw new BadRequestError(
-        "내 팀의 인원 수가 3명 미만이기 때문에 게임을 진행하실 수 없습니다.",
+        "상대 팀의 인원 수가 3명 미만이기 때문에 게임을 진행하실 수 없습니다.",
       );
 
     const myTeamArr = [];
@@ -63,25 +64,27 @@ router.patch("/events/matching/:teamId", async (req, res, next) => {
     for (let i = 1; i < 4; i++) {
       const myPlayerId = myTeam[`UserPlayer` + i].playerId;
       const myPlayer = await findPlayerFromDB(myPlayerId);
+      const myPlayerUpgrade = myTeam[`UserPlayer` + i].upgrade;
 
       // 본인 플레이어 정보가 존재하지 않을 경우
       if (!myPlayer)
         throw new NotFoundError(
-          `내 팀 선수 중 '${myPlayerId}'의 선수 데이터가 존재하지 않습니다.`,
+          `내 팀 선수 중 (${myPlayerId}) 의 선수 데이터가 존재하지 않습니다.`,
         );
 
-      myTeamArr.push(myPlayer);
+      myTeamArr.push({ player: myPlayer, upgrade: myPlayerUpgrade });
 
       const enemyPlayerId = enemyTeam[`UserPlayer` + i].playerId;
       const enemyPlayer = await findPlayerFromDB(enemyPlayerId);
+      const enemyPlayerUpgrade = enemyTeam[`UserPlayer` + i].upgrade;
 
       // 상대 플레이어 정보가 존재하지 않을 경우
       if (!myPlayer)
         throw new NotFoundError(
-          `상대 팀 선수 중 '${enemyPlayerId}'의 선수 데이터가 존재하지 않습니다.`,
+          `상대 팀 선수 중 (${enemyPlayerId}) 의 선수 데이터가 존재하지 않습니다.`,
         );
 
-      enemyTeamArr.push(enemyPlayer);
+      enemyTeamArr.push({ player: enemyPlayer, upgrade: enemyPlayerUpgrade });
     }
 
     const myTeamScore = getTeamScore(myTeamArr);
@@ -89,23 +92,49 @@ router.patch("/events/matching/:teamId", async (req, res, next) => {
 
     const matchResult = getMatchResult(myTeamScore, enemyTeamScore);
 
-    // 경기 결과에 대해 레이팅 점수를 반영한다.
-    // 승(+10 Point), 패(-10 Point)
-    // 먼저 본인 유저부터
-    // 다음 상대팀 유저
-    let myUser;
-    let enemyUser;
+    // 경기 결과에 대해 Rating 점수를 자신과 상대팀의 유저에게 반영한다.
+    // Rating 점수는 기본 10점이다.
+    // 불리한 조건(내 팀의 총 점수가 상대팀의 총 점수보다 낮을 때)
+    //    - 승리할 경우 : 기본 10점보다 더 준다.
+    //    - 패배할 경우 :
+    // 반면에, 유리한 조건일 경우 => 10점보다 덜 준다.
+    let changeRatingScore = getBonusRatingScore(
+      myTeamScore,
+      enemyTeamScore,
+      matchResult.result,
+    );
+    let myUser = null;
+    let enemyUser = null;
+    let message = "";
+
     switch (matchResult.result) {
       case MATCH_RESULT.WIN:
         {
-          myUser = await updateUserRatingToDB(myTeam.userId, +10);
-          enemyUser = await updateUserRatingToDB(enemyTeam.userId, -10);
+          myUser = await updateUserRatingToDB(myTeam.userId, changeRatingScore);
+          enemyUser = await updateUserRatingToDB(
+            enemyTeam.userId,
+            -changeRatingScore,
+          );
+          message = `[${matchResult.score}] 로 승리하셨습니다!!! Rating이 ${changeRatingScore} 증가했습니다.`;
+        }
+        break;
+      case MATCH_RESULT.DRAW:
+        {
+          myUser = await findUserFromDB(myTeam.userId);
+          message = `[${matchResult.score}] 로 비겼습니다!!!`;
         }
         break;
       case MATCH_RESULT.LOSE:
         {
-          myUser = await updateUserRatingToDB(myTeam.userId, -10);
-          enemyUser = await updateUserRatingToDB(enemyTeam.userId, 10);
+          myUser = await updateUserRatingToDB(
+            myTeam.userId,
+            -changeRatingScore,
+          );
+          enemyUser = await updateUserRatingToDB(
+            enemyTeam.userId,
+            changeRatingScore,
+          );
+          message = `[${matchResult.score}] 로 패배하셨습니다... Rating이 ${changeRatingScore} 감소했습니다.`;
         }
         break;
     }
@@ -118,9 +147,7 @@ router.patch("/events/matching/:teamId", async (req, res, next) => {
       matchResult.result,
     );
 
-    return res
-      .status(200)
-      .json({ rating: myUser.rating, message: { matchResult } });
+    return res.status(200).json({ message, rating: myUser.rating });
   } catch (error) {
     next(error);
   }
