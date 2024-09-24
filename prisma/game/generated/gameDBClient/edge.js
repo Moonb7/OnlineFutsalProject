@@ -144,6 +144,10 @@ const config = {
         "fromEnvVar": null,
         "value": "windows",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "darwin-arm64"
       }
     ],
     "previewFeatures": [],
@@ -160,7 +164,6 @@ const config = {
     "db"
   ],
   "activeProvider": "mysql",
-  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -169,8 +172,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated/gameDBClient\"\n}\n\ndatasource db {\n  provider = \"mysql\"\n  url      = env(\"DATABASE_GAME_URL\")\n}\n\nmodel Players {\n  playerId  Int      @id @default(autoincrement())\n  name      String   @unique\n  position  Int\n  speed     Int\n  decision  Int\n  power     Int\n  defense   Int\n  stamina   Int\n  tierId    Int\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n  tiers     Tiers    @relation(fields: [tierId], references: [tierId], onDelete: Cascade)\n\n  @@map(\"Players\")\n}\n\nmodel Tiers {\n  tierId                     Int       @id @default(autoincrement())\n  tierName                   String\n  pickProbability            Int\n  salePrice                  Int\n  extraStat                  Int\n  defaultUpgradeProbability  Int\n  upgradeDecreaseProbability Int\n  upgradePrice               Int\n  players                    Players[]\n\n  @@map(\"Tiers\")\n}\n",
-  "inlineSchemaHash": "56bf335221113a582d1db53468470c902fd525b0e198f98bee9a2094ba5d395a",
+  "inlineSchema": "generator client {\n  provider      = \"prisma-client-js\"\n  output        = \"./generated/gameDBClient\"\n  binaryTargets = [\"native\", \"darwin-arm64\"]\n}\n\ndatasource db {\n  provider = \"mysql\"\n  url      = env(\"DATABASE_GAME_URL\")\n}\n\nmodel Players {\n  playerId  Int      @id @default(autoincrement())\n  name      String   @unique\n  position  Int\n  speed     Int\n  decision  Int\n  power     Int\n  defense   Int\n  stamina   Int\n  tierId    Int\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n  tiers     Tiers    @relation(fields: [tierId], references: [tierId], onDelete: Cascade)\n\n  @@map(\"Players\")\n}\n\nmodel Tiers {\n  tierId                     Int       @id @default(autoincrement())\n  tierName                   String\n  pickProbability            Int\n  salePrice                  Int\n  extraStat                  Int\n  defaultUpgradeProbability  Int\n  upgradeDecreaseProbability Int\n  upgradePrice               Int\n  players                    Players[]\n\n  @@map(\"Tiers\")\n}\n",
+  "inlineSchemaHash": "9ea019905c76e32bf6565663a785b8eec904c31b6e8a1d5881be0dcc2ae95c8e",
   "copyEngine": true
 }
 config.dirname = '/'

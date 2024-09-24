@@ -55,10 +55,10 @@ router.post("/account/sign-in", async (req, res, next) => {
     password: Joi.string().required(),
   });
   try {
-    const validation = req.body;
+    const validation = await schema.validateAsync(req.body);
     const { name, password } = validation;
 
-    const account = await userPrisma.users.findUnique({
+    const account = await userPrisma.users.findFirst({
       where: { name: name },
     });
 
