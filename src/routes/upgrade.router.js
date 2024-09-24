@@ -71,8 +71,6 @@ router.post("/upgrade/:playerId", async (req, res, next) => {
     // 강화할 돈이 있는지 검증
     const userCache = await getUserCacheFromDB(userId);
 
-    console.log("UserCache : ", userCache);
-
     if (
       userCache <
       upgradePlayer.tiers.upgradePrice * upgradeUserPlayer.upgrade

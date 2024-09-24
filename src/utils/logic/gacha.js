@@ -7,9 +7,11 @@ export async function gacha() {
   const tiers = await findAllTiersFromDB();
 
   const randomValue = Math.random() * 100;
-  let selectedTier = undefined;
+  let selectedTier = null;
   let acc = 0;
 
+  // S: 5, A: 15, B: 30, C: 50
+  // randomValue = 32
   for (let i = 0; i < tiers.length; i++) {
     if (randomValue < tiers[i].pickProbability + acc) {
       selectedTier = tiers[i];
