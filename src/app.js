@@ -5,6 +5,7 @@ import EventRouter from "./routes/events.router.js";
 import GachaRouter from "./routes/gacha.router.js";
 import TeamsRouter from "./routes/teams.router.js";
 import UpgradeRouter from "./routes/upgrade.router.js";
+import UserPlayersRouter from "./routes/userPlayers.router.js"
 
 dotenv.config();
 
@@ -13,7 +14,7 @@ const PORT = process.env.SERVER_PORT;
 
 app.use(express.json());
 
-app.use("/api", [TeamsRouter, EventRouter, GachaRouter, UpgradeRouter]);
+app.use("/api", [TeamsRouter, EventRouter, GachaRouter, UpgradeRouter, UserPlayersRouter]);
 
 app.use(errorHandlingMiddleware);
 
