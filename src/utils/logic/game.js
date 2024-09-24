@@ -40,20 +40,11 @@ export function getTeamScore(team) {
 export function getMatchResult(myTeamScore, enemyTeamScore) {
   // 최대 점수는 두 팀의 총 점수의 합으로 하시면 됩니다!
   const maxScore = myTeamScore + enemyTeamScore;
-  const randomValue = parseFloat(Math.random() * maxScore).toFixed(2);
+  const randomValue = Number((Math.random() * maxScore).toFixed(2));
 
   // 무승부 처리는 점수가 작은 팀의 총 점수의 10%를 범위로 하여 처리한다.
-  const drawRangeValue = parseFloat(
-    (Math.min(myTeamScore, enemyTeamScore) / 10).toFixed(2),
-  );
-
-  console.log(
-    myTeamScore,
-    enemyTeamScore,
-    myTeamScore - drawRangeValue,
-    myTeamScore + drawRangeValue,
-  );
-  console.log(randomValue, " => (", myTeamScore - drawRangeValue, ")");
+  const minScore = Math.min(myTeamScore, enemyTeamScore);
+  const drawRangeValue = Number((minScore / 10).toFixed(2));
 
   if (randomValue <= myTeamScore - drawRangeValue) {
     // A 유저 승리 처리
