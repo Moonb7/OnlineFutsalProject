@@ -17,11 +17,12 @@ router.get("/users/userplayer", authMiddleware, async (req, res, next) => {
     for (const player of userplayers) {
       const playerInfo = await gamePrisma.players.findUnique({
         where: { playerId: player.playerId },
-        select: { name: true },
+        select: { name: true, tiers: true },
       });
 
       if (playerInfo) {
         player["name"] = playerInfo.name;
+        player["tierName"] = playerInfo.tiers.tierName;
       } else {
         throw new NotFoundError("선수 데이터가 DB에 없습니다");
       }
