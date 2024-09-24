@@ -1,6 +1,5 @@
-import { PrismaClient } from "@prisma/client";
 import { PrismaClient as GameDataClient } from "../../../prisma/game/generated/gameDBClient/index.js";
-import { PrismaClient as UserDataClient } from "../../../prisma/user/generated/userDBClient/index.js";
+import { PrismaClient as UserDataClient } from "../../../prisma/User/generated/UserDBClient/index.js";
 
 /*      Prisma ORM(Object-Relational-Mapping) 종류        */
 // 1. Prisma Client
