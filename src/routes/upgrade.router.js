@@ -1,6 +1,7 @@
 import express from "express";
 import { BadRequestError } from "../errors/BadRequestError.js";
 import { NotFoundError } from "../errors/NotFoundError.js";
+import authMiddleware from "../middlewares/auth.middleware.js";
 import {
   upgradeBodyValidate,
   upgradeParamValidate,
@@ -13,9 +14,9 @@ import { findUserPlayerFromDB } from "../utils/prisma/userPlayers.prisma.js";
 const router = express.Router();
 
 /**  선수 카드 강화 API **/
-router.post("/upgrade/:playerId", async (req, res, next) => {
+router.post("/upgrade/:playerId", authMiddleware, async (req, res, next) => {
   try {
-    const userId = 1;
+    const userId = req.user.userId;
     const { playerId } = await upgradeParamValidate(req.params);
     const { upgradeLevel, materialPlayerId } = await upgradeBodyValidate(
       req.body,

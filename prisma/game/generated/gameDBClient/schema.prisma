@@ -1,6 +1,7 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "./generated/gameDBClient"
+  provider      = "prisma-client-js"
+  output        = "./generated/gameDBClient"
+  binaryTargets = ["native", "darwin-arm64"]
 }
 
 datasource db {

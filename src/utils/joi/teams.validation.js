@@ -4,6 +4,10 @@ const teamIdParam = joi.object({
   teamId: joi.number().positive().integer().required(),
 });
 
+const teamIdOptionalParam = joi.object({
+  teamId: joi.number().positive().integer(),
+});
+
 const teamIdBody = joi.object({
   enemyTeamId: joi.number().positive().integer().required(),
 });
@@ -21,6 +25,10 @@ const positionBody = joi.object({
 
 export async function teamIdParamValidate(params) {
   return await teamIdParam.validateAsync(params);
+}
+
+export async function teamIdOptionalParamValidate(params) {
+  return await teamIdOptionalParam.validateAsync(params);
 }
 
 export async function teamIdBodyValidate(body) {
