@@ -57,13 +57,14 @@ model Teams {
 }
 
 model Caches {
-  cacheId     Int      @id @default(autoincrement())
-  userId      Int
-  cacheChange Int
-  cacheSource Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  users       Users    @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  cacheId      Int      @id @default(autoincrement())
+  userId       Int
+  cacheChange  Int
+  cacheSource  Int
+  cacheComment String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  users        Users    @relation(fields: [userId], references: [userId], onDelete: Cascade)
 
   @@map("Caches")
 }

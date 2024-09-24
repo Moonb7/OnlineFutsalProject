@@ -61,6 +61,7 @@ model Caches {
   userId      Int
   cacheChange Int
   cacheSource Int
+  cacheComment  String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   users       Users    @relation(fields: [userId], references: [userId], onDelete: Cascade)

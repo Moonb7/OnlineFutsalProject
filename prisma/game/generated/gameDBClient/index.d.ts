@@ -1970,70 +1970,110 @@ export namespace Prisma {
 
   export type TiersAvgAggregateOutputType = {
     tierId: number | null
-    probability: number | null
-    price: number | null
+    pickProbability: number | null
+    salePrice: number | null
+    extraStat: number | null
+    defaultUpgradeProbability: number | null
+    upgradeDecreaseProbability: number | null
+    upgradePrice: number | null
   }
 
   export type TiersSumAggregateOutputType = {
     tierId: number | null
-    probability: number | null
-    price: number | null
+    pickProbability: number | null
+    salePrice: number | null
+    extraStat: number | null
+    defaultUpgradeProbability: number | null
+    upgradeDecreaseProbability: number | null
+    upgradePrice: number | null
   }
 
   export type TiersMinAggregateOutputType = {
     tierId: number | null
     tierName: string | null
-    probability: number | null
-    price: number | null
+    pickProbability: number | null
+    salePrice: number | null
+    extraStat: number | null
+    defaultUpgradeProbability: number | null
+    upgradeDecreaseProbability: number | null
+    upgradePrice: number | null
   }
 
   export type TiersMaxAggregateOutputType = {
     tierId: number | null
     tierName: string | null
-    probability: number | null
-    price: number | null
+    pickProbability: number | null
+    salePrice: number | null
+    extraStat: number | null
+    defaultUpgradeProbability: number | null
+    upgradeDecreaseProbability: number | null
+    upgradePrice: number | null
   }
 
   export type TiersCountAggregateOutputType = {
     tierId: number
     tierName: number
-    probability: number
-    price: number
+    pickProbability: number
+    salePrice: number
+    extraStat: number
+    defaultUpgradeProbability: number
+    upgradeDecreaseProbability: number
+    upgradePrice: number
     _all: number
   }
 
 
   export type TiersAvgAggregateInputType = {
     tierId?: true
-    probability?: true
-    price?: true
+    pickProbability?: true
+    salePrice?: true
+    extraStat?: true
+    defaultUpgradeProbability?: true
+    upgradeDecreaseProbability?: true
+    upgradePrice?: true
   }
 
   export type TiersSumAggregateInputType = {
     tierId?: true
-    probability?: true
-    price?: true
+    pickProbability?: true
+    salePrice?: true
+    extraStat?: true
+    defaultUpgradeProbability?: true
+    upgradeDecreaseProbability?: true
+    upgradePrice?: true
   }
 
   export type TiersMinAggregateInputType = {
     tierId?: true
     tierName?: true
-    probability?: true
-    price?: true
+    pickProbability?: true
+    salePrice?: true
+    extraStat?: true
+    defaultUpgradeProbability?: true
+    upgradeDecreaseProbability?: true
+    upgradePrice?: true
   }
 
   export type TiersMaxAggregateInputType = {
     tierId?: true
     tierName?: true
-    probability?: true
-    price?: true
+    pickProbability?: true
+    salePrice?: true
+    extraStat?: true
+    defaultUpgradeProbability?: true
+    upgradeDecreaseProbability?: true
+    upgradePrice?: true
   }
 
   export type TiersCountAggregateInputType = {
     tierId?: true
     tierName?: true
-    probability?: true
-    price?: true
+    pickProbability?: true
+    salePrice?: true
+    extraStat?: true
+    defaultUpgradeProbability?: true
+    upgradeDecreaseProbability?: true
+    upgradePrice?: true
     _all?: true
   }
 
@@ -2126,8 +2166,12 @@ export namespace Prisma {
   export type TiersGroupByOutputType = {
     tierId: number
     tierName: string
-    probability: number
-    price: number
+    pickProbability: number
+    salePrice: number
+    extraStat: number
+    defaultUpgradeProbability: number
+    upgradeDecreaseProbability: number
+    upgradePrice: number
     _count: TiersCountAggregateOutputType | null
     _avg: TiersAvgAggregateOutputType | null
     _sum: TiersSumAggregateOutputType | null
@@ -2152,8 +2196,12 @@ export namespace Prisma {
   export type TiersSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     tierId?: boolean
     tierName?: boolean
-    probability?: boolean
-    price?: boolean
+    pickProbability?: boolean
+    salePrice?: boolean
+    extraStat?: boolean
+    defaultUpgradeProbability?: boolean
+    upgradeDecreaseProbability?: boolean
+    upgradePrice?: boolean
     players?: boolean | Tiers$playersArgs<ExtArgs>
     _count?: boolean | TiersCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["tiers"]>
@@ -2162,8 +2210,12 @@ export namespace Prisma {
   export type TiersSelectScalar = {
     tierId?: boolean
     tierName?: boolean
-    probability?: boolean
-    price?: boolean
+    pickProbability?: boolean
+    salePrice?: boolean
+    extraStat?: boolean
+    defaultUpgradeProbability?: boolean
+    upgradeDecreaseProbability?: boolean
+    upgradePrice?: boolean
   }
 
   export type TiersInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2179,8 +2231,12 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       tierId: number
       tierName: string
-      probability: number
-      price: number
+      pickProbability: number
+      salePrice: number
+      extraStat: number
+      defaultUpgradeProbability: number
+      upgradeDecreaseProbability: number
+      upgradePrice: number
     }, ExtArgs["result"]["tiers"]>
     composites: {}
   }
@@ -2553,8 +2609,12 @@ export namespace Prisma {
   interface TiersFieldRefs {
     readonly tierId: FieldRef<"Tiers", 'Int'>
     readonly tierName: FieldRef<"Tiers", 'String'>
-    readonly probability: FieldRef<"Tiers", 'Int'>
-    readonly price: FieldRef<"Tiers", 'Int'>
+    readonly pickProbability: FieldRef<"Tiers", 'Int'>
+    readonly salePrice: FieldRef<"Tiers", 'Int'>
+    readonly extraStat: FieldRef<"Tiers", 'Int'>
+    readonly defaultUpgradeProbability: FieldRef<"Tiers", 'Int'>
+    readonly upgradeDecreaseProbability: FieldRef<"Tiers", 'Int'>
+    readonly upgradePrice: FieldRef<"Tiers", 'Int'>
   }
     
 
@@ -2922,8 +2982,12 @@ export namespace Prisma {
   export const TiersScalarFieldEnum: {
     tierId: 'tierId',
     tierName: 'tierName',
-    probability: 'probability',
-    price: 'price'
+    pickProbability: 'pickProbability',
+    salePrice: 'salePrice',
+    extraStat: 'extraStat',
+    defaultUpgradeProbability: 'defaultUpgradeProbability',
+    upgradeDecreaseProbability: 'upgradeDecreaseProbability',
+    upgradePrice: 'upgradePrice'
   };
 
   export type TiersScalarFieldEnum = (typeof TiersScalarFieldEnum)[keyof typeof TiersScalarFieldEnum]
@@ -3066,16 +3130,24 @@ export namespace Prisma {
     NOT?: TiersWhereInput | TiersWhereInput[]
     tierId?: IntFilter<"Tiers"> | number
     tierName?: StringFilter<"Tiers"> | string
-    probability?: IntFilter<"Tiers"> | number
-    price?: IntFilter<"Tiers"> | number
+    pickProbability?: IntFilter<"Tiers"> | number
+    salePrice?: IntFilter<"Tiers"> | number
+    extraStat?: IntFilter<"Tiers"> | number
+    defaultUpgradeProbability?: IntFilter<"Tiers"> | number
+    upgradeDecreaseProbability?: IntFilter<"Tiers"> | number
+    upgradePrice?: IntFilter<"Tiers"> | number
     players?: PlayersListRelationFilter
   }
 
   export type TiersOrderByWithRelationInput = {
     tierId?: SortOrder
     tierName?: SortOrder
-    probability?: SortOrder
-    price?: SortOrder
+    pickProbability?: SortOrder
+    salePrice?: SortOrder
+    extraStat?: SortOrder
+    defaultUpgradeProbability?: SortOrder
+    upgradeDecreaseProbability?: SortOrder
+    upgradePrice?: SortOrder
     players?: PlayersOrderByRelationAggregateInput
   }
 
@@ -3085,16 +3157,24 @@ export namespace Prisma {
     OR?: TiersWhereInput[]
     NOT?: TiersWhereInput | TiersWhereInput[]
     tierName?: StringFilter<"Tiers"> | string
-    probability?: IntFilter<"Tiers"> | number
-    price?: IntFilter<"Tiers"> | number
+    pickProbability?: IntFilter<"Tiers"> | number
+    salePrice?: IntFilter<"Tiers"> | number
+    extraStat?: IntFilter<"Tiers"> | number
+    defaultUpgradeProbability?: IntFilter<"Tiers"> | number
+    upgradeDecreaseProbability?: IntFilter<"Tiers"> | number
+    upgradePrice?: IntFilter<"Tiers"> | number
     players?: PlayersListRelationFilter
   }, "tierId">
 
   export type TiersOrderByWithAggregationInput = {
     tierId?: SortOrder
     tierName?: SortOrder
-    probability?: SortOrder
-    price?: SortOrder
+    pickProbability?: SortOrder
+    salePrice?: SortOrder
+    extraStat?: SortOrder
+    defaultUpgradeProbability?: SortOrder
+    upgradeDecreaseProbability?: SortOrder
+    upgradePrice?: SortOrder
     _count?: TiersCountOrderByAggregateInput
     _avg?: TiersAvgOrderByAggregateInput
     _max?: TiersMaxOrderByAggregateInput
@@ -3108,8 +3188,12 @@ export namespace Prisma {
     NOT?: TiersScalarWhereWithAggregatesInput | TiersScalarWhereWithAggregatesInput[]
     tierId?: IntWithAggregatesFilter<"Tiers"> | number
     tierName?: StringWithAggregatesFilter<"Tiers"> | string
-    probability?: IntWithAggregatesFilter<"Tiers"> | number
-    price?: IntWithAggregatesFilter<"Tiers"> | number
+    pickProbability?: IntWithAggregatesFilter<"Tiers"> | number
+    salePrice?: IntWithAggregatesFilter<"Tiers"> | number
+    extraStat?: IntWithAggregatesFilter<"Tiers"> | number
+    defaultUpgradeProbability?: IntWithAggregatesFilter<"Tiers"> | number
+    upgradeDecreaseProbability?: IntWithAggregatesFilter<"Tiers"> | number
+    upgradePrice?: IntWithAggregatesFilter<"Tiers"> | number
   }
 
   export type PlayersCreateInput = {
@@ -3208,52 +3292,80 @@ export namespace Prisma {
 
   export type TiersCreateInput = {
     tierName: string
-    probability: number
-    price: number
+    pickProbability: number
+    salePrice: number
+    extraStat: number
+    defaultUpgradeProbability: number
+    upgradeDecreaseProbability: number
+    upgradePrice: number
     players?: PlayersCreateNestedManyWithoutTiersInput
   }
 
   export type TiersUncheckedCreateInput = {
     tierId?: number
     tierName: string
-    probability: number
-    price: number
+    pickProbability: number
+    salePrice: number
+    extraStat: number
+    defaultUpgradeProbability: number
+    upgradeDecreaseProbability: number
+    upgradePrice: number
     players?: PlayersUncheckedCreateNestedManyWithoutTiersInput
   }
 
   export type TiersUpdateInput = {
     tierName?: StringFieldUpdateOperationsInput | string
-    probability?: IntFieldUpdateOperationsInput | number
-    price?: IntFieldUpdateOperationsInput | number
+    pickProbability?: IntFieldUpdateOperationsInput | number
+    salePrice?: IntFieldUpdateOperationsInput | number
+    extraStat?: IntFieldUpdateOperationsInput | number
+    defaultUpgradeProbability?: IntFieldUpdateOperationsInput | number
+    upgradeDecreaseProbability?: IntFieldUpdateOperationsInput | number
+    upgradePrice?: IntFieldUpdateOperationsInput | number
     players?: PlayersUpdateManyWithoutTiersNestedInput
   }
 
   export type TiersUncheckedUpdateInput = {
     tierId?: IntFieldUpdateOperationsInput | number
     tierName?: StringFieldUpdateOperationsInput | string
-    probability?: IntFieldUpdateOperationsInput | number
-    price?: IntFieldUpdateOperationsInput | number
+    pickProbability?: IntFieldUpdateOperationsInput | number
+    salePrice?: IntFieldUpdateOperationsInput | number
+    extraStat?: IntFieldUpdateOperationsInput | number
+    defaultUpgradeProbability?: IntFieldUpdateOperationsInput | number
+    upgradeDecreaseProbability?: IntFieldUpdateOperationsInput | number
+    upgradePrice?: IntFieldUpdateOperationsInput | number
     players?: PlayersUncheckedUpdateManyWithoutTiersNestedInput
   }
 
   export type TiersCreateManyInput = {
     tierId?: number
     tierName: string
-    probability: number
-    price: number
+    pickProbability: number
+    salePrice: number
+    extraStat: number
+    defaultUpgradeProbability: number
+    upgradeDecreaseProbability: number
+    upgradePrice: number
   }
 
   export type TiersUpdateManyMutationInput = {
     tierName?: StringFieldUpdateOperationsInput | string
-    probability?: IntFieldUpdateOperationsInput | number
-    price?: IntFieldUpdateOperationsInput | number
+    pickProbability?: IntFieldUpdateOperationsInput | number
+    salePrice?: IntFieldUpdateOperationsInput | number
+    extraStat?: IntFieldUpdateOperationsInput | number
+    defaultUpgradeProbability?: IntFieldUpdateOperationsInput | number
+    upgradeDecreaseProbability?: IntFieldUpdateOperationsInput | number
+    upgradePrice?: IntFieldUpdateOperationsInput | number
   }
 
   export type TiersUncheckedUpdateManyInput = {
     tierId?: IntFieldUpdateOperationsInput | number
     tierName?: StringFieldUpdateOperationsInput | string
-    probability?: IntFieldUpdateOperationsInput | number
-    price?: IntFieldUpdateOperationsInput | number
+    pickProbability?: IntFieldUpdateOperationsInput | number
+    salePrice?: IntFieldUpdateOperationsInput | number
+    extraStat?: IntFieldUpdateOperationsInput | number
+    defaultUpgradeProbability?: IntFieldUpdateOperationsInput | number
+    upgradeDecreaseProbability?: IntFieldUpdateOperationsInput | number
+    upgradePrice?: IntFieldUpdateOperationsInput | number
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -3421,34 +3533,54 @@ export namespace Prisma {
   export type TiersCountOrderByAggregateInput = {
     tierId?: SortOrder
     tierName?: SortOrder
-    probability?: SortOrder
-    price?: SortOrder
+    pickProbability?: SortOrder
+    salePrice?: SortOrder
+    extraStat?: SortOrder
+    defaultUpgradeProbability?: SortOrder
+    upgradeDecreaseProbability?: SortOrder
+    upgradePrice?: SortOrder
   }
 
   export type TiersAvgOrderByAggregateInput = {
     tierId?: SortOrder
-    probability?: SortOrder
-    price?: SortOrder
+    pickProbability?: SortOrder
+    salePrice?: SortOrder
+    extraStat?: SortOrder
+    defaultUpgradeProbability?: SortOrder
+    upgradeDecreaseProbability?: SortOrder
+    upgradePrice?: SortOrder
   }
 
   export type TiersMaxOrderByAggregateInput = {
     tierId?: SortOrder
     tierName?: SortOrder
-    probability?: SortOrder
-    price?: SortOrder
+    pickProbability?: SortOrder
+    salePrice?: SortOrder
+    extraStat?: SortOrder
+    defaultUpgradeProbability?: SortOrder
+    upgradeDecreaseProbability?: SortOrder
+    upgradePrice?: SortOrder
   }
 
   export type TiersMinOrderByAggregateInput = {
     tierId?: SortOrder
     tierName?: SortOrder
-    probability?: SortOrder
-    price?: SortOrder
+    pickProbability?: SortOrder
+    salePrice?: SortOrder
+    extraStat?: SortOrder
+    defaultUpgradeProbability?: SortOrder
+    upgradeDecreaseProbability?: SortOrder
+    upgradePrice?: SortOrder
   }
 
   export type TiersSumOrderByAggregateInput = {
     tierId?: SortOrder
-    probability?: SortOrder
-    price?: SortOrder
+    pickProbability?: SortOrder
+    salePrice?: SortOrder
+    extraStat?: SortOrder
+    defaultUpgradeProbability?: SortOrder
+    upgradeDecreaseProbability?: SortOrder
+    upgradePrice?: SortOrder
   }
 
   export type TiersCreateNestedOneWithoutPlayersInput = {
@@ -3619,15 +3751,23 @@ export namespace Prisma {
 
   export type TiersCreateWithoutPlayersInput = {
     tierName: string
-    probability: number
-    price: number
+    pickProbability: number
+    salePrice: number
+    extraStat: number
+    defaultUpgradeProbability: number
+    upgradeDecreaseProbability: number
+    upgradePrice: number
   }
 
   export type TiersUncheckedCreateWithoutPlayersInput = {
     tierId?: number
     tierName: string
-    probability: number
-    price: number
+    pickProbability: number
+    salePrice: number
+    extraStat: number
+    defaultUpgradeProbability: number
+    upgradeDecreaseProbability: number
+    upgradePrice: number
   }
 
   export type TiersCreateOrConnectWithoutPlayersInput = {
@@ -3648,15 +3788,23 @@ export namespace Prisma {
 
   export type TiersUpdateWithoutPlayersInput = {
     tierName?: StringFieldUpdateOperationsInput | string
-    probability?: IntFieldUpdateOperationsInput | number
-    price?: IntFieldUpdateOperationsInput | number
+    pickProbability?: IntFieldUpdateOperationsInput | number
+    salePrice?: IntFieldUpdateOperationsInput | number
+    extraStat?: IntFieldUpdateOperationsInput | number
+    defaultUpgradeProbability?: IntFieldUpdateOperationsInput | number
+    upgradeDecreaseProbability?: IntFieldUpdateOperationsInput | number
+    upgradePrice?: IntFieldUpdateOperationsInput | number
   }
 
   export type TiersUncheckedUpdateWithoutPlayersInput = {
     tierId?: IntFieldUpdateOperationsInput | number
     tierName?: StringFieldUpdateOperationsInput | string
-    probability?: IntFieldUpdateOperationsInput | number
-    price?: IntFieldUpdateOperationsInput | number
+    pickProbability?: IntFieldUpdateOperationsInput | number
+    salePrice?: IntFieldUpdateOperationsInput | number
+    extraStat?: IntFieldUpdateOperationsInput | number
+    defaultUpgradeProbability?: IntFieldUpdateOperationsInput | number
+    upgradeDecreaseProbability?: IntFieldUpdateOperationsInput | number
+    upgradePrice?: IntFieldUpdateOperationsInput | number
   }
 
   export type PlayersCreateWithoutTiersInput = {
