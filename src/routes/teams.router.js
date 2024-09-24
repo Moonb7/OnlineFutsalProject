@@ -39,6 +39,8 @@ router.get("/team/:teamId", async (req, res, next) => {
           where: { userPlayerId: team[userPlayerId] },
         });
         playerIds.push(playerId.playerId);
+      } else {
+        playerIds.push(null);
       }
     }
 
@@ -46,29 +48,32 @@ router.get("/team/:teamId", async (req, res, next) => {
     const resultMessage = [];
     let slot = 1;
     for (const playerId of playerIds) {
-      const player = await gamePrisma.players.findFirst({
-        select: {
-          playerId: true,
-          name: true,
-          position: true,
-          speed: true,
-          decision: true,
-          power: true,
-          defense: true,
-          stamina: true,
-          tierId: true,
-        },
-        where: { playerId: playerId },
-      });
+      if (playerId) {
+        const player = await gamePrisma.players.findFirst({
+          select: {
+            playerId: true,
+            name: true,
+            position: true,
+            speed: true,
+            decision: true,
+            power: true,
+            defense: true,
+            stamina: true,
+            tierId: true,
+          },
+          where: { playerId: playerId },
+        });
 
-      if (!player) throw new NotFoundError("선수정보가 존재하지 않습니다.");
+        if (!player) throw new NotFoundError("선수정보가 존재하지 않습니다.");
 
-      const data = { slot };
-      for (const key in player) {
-        data[key] = player[key];
+        const data = { slot };
+        for (const key in player) {
+          data[key] = player[key];
+        }
+
+        resultMessage.push(data);
       }
 
-      resultMessage.push(data);
       slot += 1;
     }
 
