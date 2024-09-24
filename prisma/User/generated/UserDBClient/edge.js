@@ -165,7 +165,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\KYH\\Desktop\\OnlineFutsal_Fork\\OnlineFutsalProject\\prisma\\user\\generated\\UserDBClient",
+      "value": "C:\\Users\\KYH\\Desktop\\OnlineFutsal_Fork\\OnlineFutsalProject\\prisma\\User\\generated\\UserDBClient",
       "fromEnvVar": null
     },
     "config": {
@@ -180,10 +180,14 @@ const config = {
       {
         "fromEnvVar": null,
         "value": "darwin-arm64"
+      },
+      {
+        "fromEnvVar": null,
+        "value": "debian-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\KYH\\Desktop\\OnlineFutsal_Fork\\OnlineFutsalProject\\prisma\\user\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\KYH\\Desktop\\OnlineFutsal_Fork\\OnlineFutsalProject\\prisma\\User\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -196,6 +200,7 @@ const config = {
     "db"
   ],
   "activeProvider": "mysql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -204,8 +209,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider      = \"prisma-client-js\"\n  output        = \"./generated/UserDBClient\"\n  binaryTargets = [\"native\", \"darwin-arm64\"]\n}\n\ndatasource db {\n  provider = \"mysql\"\n  url      = env(\"DATABASE_USER_URL\")\n}\n\nmodel Users {\n  userId      Int           @id @default(autoincrement())\n  name        String        @unique\n  password    String\n  rating      Int           @default(1000)\n  createdAt   DateTime      @default(now())\n  updatedAt   DateTime      @updatedAt\n  Caches      Caches[]\n  EnemyUsers  MatchLogs[]   @relation(\"EnemyUsers\")\n  Users       MatchLogs[]   @relation(\"Users\")\n  teams       Teams[]\n  userPlayers UserPlayers[]\n\n  @@map(\"Users\")\n}\n\nmodel UserPlayers {\n  userPlayerId Int      @id @default(autoincrement())\n  userId       Int\n  playerId     Int\n  count        Int\n  upgrade      Int      @default(1)\n  createdAt    DateTime @default(now())\n  updatedAt    DateTime @updatedAt\n  UserPlayer1  Teams[]  @relation(\"UserPlayer1\")\n  UserPlayer2  Teams[]  @relation(\"UserPlayer2\")\n  UserPlayer3  Teams[]  @relation(\"UserPlayer3\")\n  users        Users    @relation(fields: [userId], references: [userId], onDelete: Cascade)\n\n  @@map(\"UserPlayers\")\n}\n\nmodel Teams {\n  teamId        Int          @id @default(autoincrement())\n  userId        Int\n  userPlayerId1 Int?\n  userPlayerId2 Int?\n  userPlayerId3 Int?\n  createdAt     DateTime     @default(now())\n  updatedAt     DateTime     @updatedAt\n  users         Users        @relation(fields: [userId], references: [userId], onDelete: Cascade)\n  UserPlayer1   UserPlayers? @relation(\"UserPlayer1\", fields: [userPlayerId1], references: [userPlayerId], onDelete: Cascade)\n  UserPlayer2   UserPlayers? @relation(\"UserPlayer2\", fields: [userPlayerId2], references: [userPlayerId], onDelete: Cascade)\n  UserPlayer3   UserPlayers? @relation(\"UserPlayer3\", fields: [userPlayerId3], references: [userPlayerId], onDelete: Cascade)\n\n  @@map(\"Teams\")\n}\n\nmodel Caches {\n  cacheId      Int      @id @default(autoincrement())\n  userId       Int\n  cacheChange  Int\n  cacheSource  Int\n  cacheComment String\n  createdAt    DateTime @default(now())\n  updatedAt    DateTime @updatedAt\n  users        Users    @relation(fields: [userId], references: [userId], onDelete: Cascade)\n\n  @@map(\"Caches\")\n}\n\nmodel MatchLogs {\n  matchLogId  Int      @id @default(autoincrement())\n  userId      Int\n  enemyUserId Int\n  isWin       Int\n  playedAt    DateTime @default(now())\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n  EnemyUsers  Users    @relation(\"EnemyUsers\", fields: [enemyUserId], references: [userId])\n  Users       Users    @relation(\"Users\", fields: [userId], references: [userId])\n\n  @@map(\"MatchLogs\")\n}\n",
-  "inlineSchemaHash": "b444da669f2b3f596cca998fc95d94d1af7cf4fe105842ae1577a5c50a5abf4a",
+  "inlineSchema": "generator client {\n  provider      = \"prisma-client-js\"\n  output        = \"./generated/UserDBClient\"\n  binaryTargets = [\"native\", \"darwin-arm64\", \"debian-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"mysql\"\n  url      = env(\"DATABASE_USER_URL\")\n}\n\nmodel Users {\n  userId      Int           @id @default(autoincrement())\n  name        String        @unique\n  password    String\n  rating      Int           @default(1000)\n  createdAt   DateTime      @default(now())\n  updatedAt   DateTime      @updatedAt\n  Caches      Caches[]\n  EnemyUsers  MatchLogs[]   @relation(\"EnemyUsers\")\n  Users       MatchLogs[]   @relation(\"Users\")\n  teams       Teams[]\n  userPlayers UserPlayers[]\n\n  @@map(\"Users\")\n}\n\nmodel UserPlayers {\n  userPlayerId Int      @id @default(autoincrement())\n  userId       Int\n  playerId     Int\n  count        Int\n  upgrade      Int      @default(1)\n  createdAt    DateTime @default(now())\n  updatedAt    DateTime @updatedAt\n  UserPlayer1  Teams[]  @relation(\"UserPlayer1\")\n  UserPlayer2  Teams[]  @relation(\"UserPlayer2\")\n  UserPlayer3  Teams[]  @relation(\"UserPlayer3\")\n  users        Users    @relation(fields: [userId], references: [userId], onDelete: Cascade)\n\n  @@map(\"UserPlayers\")\n}\n\nmodel Teams {\n  teamId        Int          @id @default(autoincrement())\n  userId        Int\n  userPlayerId1 Int?\n  userPlayerId2 Int?\n  userPlayerId3 Int?\n  createdAt     DateTime     @default(now())\n  updatedAt     DateTime     @updatedAt\n  users         Users        @relation(fields: [userId], references: [userId], onDelete: Cascade)\n  UserPlayer1   UserPlayers? @relation(\"UserPlayer1\", fields: [userPlayerId1], references: [userPlayerId], onDelete: Cascade)\n  UserPlayer2   UserPlayers? @relation(\"UserPlayer2\", fields: [userPlayerId2], references: [userPlayerId], onDelete: Cascade)\n  UserPlayer3   UserPlayers? @relation(\"UserPlayer3\", fields: [userPlayerId3], references: [userPlayerId], onDelete: Cascade)\n\n  @@map(\"Teams\")\n}\n\nmodel Caches {\n  cacheId      Int      @id @default(autoincrement())\n  userId       Int\n  cacheChange  Int\n  cacheSource  Int\n  cacheComment String\n  createdAt    DateTime @default(now())\n  updatedAt    DateTime @updatedAt\n  users        Users    @relation(fields: [userId], references: [userId], onDelete: Cascade)\n\n  @@map(\"Caches\")\n}\n\nmodel MatchLogs {\n  matchLogId  Int      @id @default(autoincrement())\n  userId      Int\n  enemyUserId Int\n  isWin       Int\n  playedAt    DateTime @default(now())\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n  EnemyUsers  Users    @relation(\"EnemyUsers\", fields: [enemyUserId], references: [userId])\n  Users       Users    @relation(\"Users\", fields: [userId], references: [userId])\n\n  @@map(\"MatchLogs\")\n}\n",
+  "inlineSchemaHash": "cea6563f3b70c413701d216cb4da62ea9a31a9ba8a5af0c7fe91d6dc86b7b7e9",
   "copyEngine": true
 }
 config.dirname = '/'
