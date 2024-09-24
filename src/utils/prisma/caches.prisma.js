@@ -11,6 +11,7 @@ Object.freeze(CACHE_SOURCE);
 
 export async function getUserCacheFromDB(userId) {
   const userCache = await userPrisma.caches.aggregate({
+    where: { userId },
     _sum: {
       cacheChange: true,
     },
