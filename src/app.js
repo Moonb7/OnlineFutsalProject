@@ -8,7 +8,8 @@ import RankRouter from "./routes/rank.router.js";
 import UpgradeRouter from "./routes/upgrade.router.js";
 import UserPlayersRouter from "./routes/userPlayers.router.js"
 import PlayerRouter from "./routes/player.router.js";
-
+import AccountRouter from "./routes/account.js";
+import cash from "./routes/cash.js";
 
 dotenv.config();
 
@@ -17,7 +18,7 @@ const PORT = process.env.SERVER_PORT;
 
 app.use(express.json());
 
-app.use("/api", [PlayerRouter, TeamsRouter, EventRouter, GachaRouter, UpgradeRouter, UserPlayersRouter]);
+app.use("/api", [PlayerRouter, TeamsRouter, EventRouter, GachaRouter, UpgradeRouter, UserPlayersRouter,RankRouter ,AccountRouter,cash]);
 
 app.use(errorHandlingMiddleware);
 
