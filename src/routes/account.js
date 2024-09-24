@@ -62,10 +62,7 @@ router.post("/account/sign-in", async (req, res, next) => {
       where: { name: name },
     });
 
-    const passwordMatch = await bcrypt.compare(
-      accountPassword,
-      account.password,
-    );
+    const passwordMatch = await bcrypt.compare(password, account.password);
 
     if (!account || !passwordMatch) {
       throw new BadRequestError("아이디 혹은 비밀번호가 일치하지 않습니다.");
