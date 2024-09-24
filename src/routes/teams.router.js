@@ -1,13 +1,13 @@
 import express from "express";
-import { userPrisma, gamePrisma } from "../utils/prisma/index.js";
+import { BadRequestError } from "../errors/BadRequestError.js";
 import { ConflictError } from "../errors/ConflictError.js";
 import { NotFoundError } from "../errors/NotFoundError.js";
-import { BadRequestError } from "../errors/BadRequestError.js";
 import {
+  positionBodyValidate,
   teamIdParamValidate,
   teamInfoBodyValidate,
-  positionBodyValidate,
 } from "../utils/joi/teams.validation.js";
+import { gamePrisma, userPrisma } from "../utils/prisma/index.js";
 
 const router = express.Router();
 
@@ -192,7 +192,7 @@ router.post("/team/:teamId", async (req, res, next) => {
 });
 
 // 선수 후보 등록 API
-router.delete("/team/test1/:teamId", async (req, res, next) => {
+router.delete("/team/:teamId", async (req, res, next) => {
   try {
     const userId = 1;
     const { teamId } = await teamIdParamValidate(req.params);

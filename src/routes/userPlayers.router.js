@@ -4,7 +4,6 @@ import { NotFoundError } from "../errors/NotFoundError.js";
 import { BadRequestError } from "../errors/BadRequestError.js";
 import { CACHE_SOURCE } from "../utils/prisma/caches.prisma.js";
 
-
 const router = express.Router();
 
 router.get('/users/userplayer' , async (req,res, next) => {

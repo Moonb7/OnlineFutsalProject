@@ -4,8 +4,11 @@ import errorHandlingMiddleware from "./middlewares/errorHandling.middleware.js";
 import EventRouter from "./routes/events.router.js";
 import GachaRouter from "./routes/gacha.router.js";
 import TeamsRouter from "./routes/teams.router.js";
+import RankRouter from "./routes/rank.router.js";
 import UpgradeRouter from "./routes/upgrade.router.js";
 import UserPlayersRouter from "./routes/userPlayers.router.js"
+import PlayerRouter from "./routes/player.router.js";
+
 
 dotenv.config();
 
@@ -14,7 +17,7 @@ const PORT = process.env.SERVER_PORT;
 
 app.use(express.json());
 
-app.use("/api", [TeamsRouter, EventRouter, GachaRouter, UpgradeRouter, UserPlayersRouter]);
+app.use("/api", [PlayerRouter, TeamsRouter, EventRouter, GachaRouter, UpgradeRouter, UserPlayersRouter]);
 
 app.use(errorHandlingMiddleware);
 

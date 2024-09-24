@@ -19,7 +19,7 @@ const router = express.Router();
 router.post("/gacha", async (req, res, next) => {
   try {
     // userId는 인증처리 미들웨어 구현 후 추후 req.header.authorization 교체
-    const userId = 1;
+    const userId = 2;
     const { gachaCount } = await gachaBodyValidate(req.body);
 
     // user가 gacha를 gachaCount 할만큼 Cache가 있는지 체크
