@@ -1,19 +1,16 @@
-import { gamePrisma } from "../utils/prisma/index.js";
-import { BadRequestError } from "../errors/BadRequestError.js";
-import { ForbiddenError } from "../errors/ForbiddenError.js";
-import { NotFoundError } from "../errors/NotFoundError.js";
 import express from "express";
+import { gamePrisma } from "../utils/prisma/index.js";
 
 const router = express.Router();
 
 // 선수 생성 API
 router.post("/player", async (req, res, next) => {
-  const { playerId, name, position, speed, decision, power, defense, stamina, tierId } = req.body;
+  const { name, position, speed, decision, power, defense, stamina, tierId } =
+    req.body;
 
   try {
     const newPlayer = await gamePrisma.players.create({
       data: {
-        playerId,
         name,
         position,
         speed,

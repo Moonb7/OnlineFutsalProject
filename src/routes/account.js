@@ -1,11 +1,11 @@
-import express from "express";
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-import Joi from "joi";
 import bcrypt from "bcrypt";
+import dotenv from "dotenv";
+import express from "express";
+import Joi from "joi";
+import jwt from "jsonwebtoken";
 import { BadRequestError } from "../errors/BadRequestError.js";
-import { userPrisma } from "../utils/prisma/index.js";
 import { ConflictError } from "../errors/ConflictError.js";
+import { userPrisma } from "../utils/prisma/index.js";
 
 dotenv.config();
 
@@ -39,7 +39,7 @@ router.post("/account/sign-up", async (req, res, next) => {
     const newaccount = await userPrisma.users.create({
       data: {
         name: name,
-        password: password,
+        password: hashedPassword,
       },
     });
 
@@ -55,26 +55,24 @@ router.post("/account/sign-in", async (req, res, next) => {
     password: Joi.string().required(),
   });
   try {
-    const validation = req.body;
+    const validation = await schema.validateAsync(req.body);
     const { name, password } = validation;
 
-    const account = await userPrisma.users.findUnique({
+    const account = await userPrisma.users.findFirst({
       where: { name: name },
     });
 
-    // const passwordMatch = await bcrypt.compare(
-    //   accountPassword,
-    //   account.password,
-    // );
+    const passwordMatch = await bcrypt.compare(password, account.password);
 
-    if (!account || !password) {
+    if (!account || !passwordMatch) {
       throw new BadRequestError("아이디 혹은 비밀번호가 일치하지 않습니다.");
     }
 
     const token = jwt.sign({ name: account.name }, process.env.SECRET_KEY, {
       expiresIn: "1d",
     });
-    res.header('authorization', `Bearer ${token}`);
+
+    res.header("authorization", `Bearer ${token}`);
     res.status(200).json({ message: "로그인 성공", token: token });
   } catch (error) {
     next(error);

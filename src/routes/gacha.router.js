@@ -1,5 +1,6 @@
 import express from "express";
 import { BadRequestError } from "../errors/BadRequestError.js";
+import authMiddleware from "../middlewares/auth.middleware.js";
 import { gachaBodyValidate } from "../utils/joi/gacha.validation.js";
 import { gacha, GACHA_PRICE } from "../utils/logic/gacha.js";
 import {
@@ -16,10 +17,10 @@ import {
 const router = express.Router();
 
 /** 선수 가챠 뽑기 API **/
-router.post("/gacha", async (req, res, next) => {
+router.post("/gacha", authMiddleware, async (req, res, next) => {
   try {
     // userId는 인증처리 미들웨어 구현 후 추후 req.header.authorization 교체
-    const userId = 2;
+    const userId = req.user.userId;
     const { gachaCount } = await gachaBodyValidate(req.body);
 
     // user가 gacha를 gachaCount 할만큼 Cache가 있는지 체크
